@@ -6,8 +6,9 @@ import { usePathname } from 'next/navigation';
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
+  { href: '/marcas', label: 'Marcas' },
   { href: '/catalogo', label: 'Productos' },
-  { href: '/distribuidores', label: 'Distribuidores' },
+  // { href: '/distribuidores', label: 'Distribuidores' },
   { href: '/#nosotros', label: 'Nosotros' },
 ];
 
@@ -35,11 +36,10 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className={`text-base font-medium leading-normal transition-colors hover:text-[#D00000] ${
-                    pathname === href
-                      ? 'text-[#D00000] font-semibold'
-                      : 'text-[#0d151c]'
-                  }`}
+                  className={`text-base font-medium leading-normal transition-colors hover:text-[#D00000] ${pathname === href
+                    ? 'text-[#D00000] font-semibold'
+                    : 'text-[#0d151c]'
+                    }`}
                 >
                   {label}
                 </Link>

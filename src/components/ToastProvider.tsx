@@ -18,7 +18,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const push = (message: string, type: Toast['type'] = 'success') => {
-    const id = crypto.randomUUID();
+    const id = Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((toast) => toast.id !== id));
@@ -34,13 +34,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`min-w-[240px] rounded-lg px-4 py-3 text-sm font-semibold shadow-lg border ${
-              toast.type === 'error'
+            className={`min-w-[240px] rounded-lg px-4 py-3 text-sm font-semibold shadow-lg border ${toast.type === 'error'
                 ? 'bg-red-50 text-red-700 border-red-200'
                 : toast.type === 'info'
-                ? 'bg-slate-50 text-slate-700 border-slate-200'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-            }`}
+                  ? 'bg-slate-50 text-slate-700 border-slate-200'
+                  : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              }`}
           >
             {toast.message}
           </div>

@@ -49,13 +49,10 @@ export default function Footer() {
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Distribuidores</h3>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Clientes</h3>
             <div className="flex flex-col gap-2">
-              <Link className="text-gray-400 hover:text-white text-sm transition-colors" href="/distribuidores">
-                Ser distribuidor
-              </Link>
-              <Link className="text-gray-400 hover:text-white text-sm transition-colors" href="/distribuidores">
-                Ver distribuidores
+              <Link className="text-gray-400 hover:text-white text-sm transition-colors" href="/contacto">
+                Ser cliente nuestro
               </Link>
             </div>
           </div>

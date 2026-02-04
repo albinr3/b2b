@@ -1,21 +1,20 @@
 import CatalogClient from './CatalogClient';
 import { prisma } from '@/lib/prisma';
 
-export default async function CatalogoPage({
-  searchParams,
-}: {
-  searchParams?: { cat?: string };
+export default async function CatalogoPage(props: {
+  searchParams?: Promise<{ cat?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const activeCategory = searchParams?.cat?.trim() || null;
 
   const [products, categories] = await Promise.all([
     prisma.product.findMany({
       where: activeCategory
         ? {
-            category: {
-              slug: activeCategory,
-            },
-          }
+          category: {
+            slug: activeCategory,
+          },
+        }
         : undefined,
       include: {
         category: true,
