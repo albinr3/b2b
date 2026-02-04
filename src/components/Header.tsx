@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -17,13 +18,16 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="border-b border-solid border-[#e7eef3] px-6 py-3">
         <div className="max-w-[1280px] mx-auto flex items-center justify-between whitespace-nowrap">
-          <Link href="/" className="flex items-center gap-4 text-[#0d151c]">
-            <div className="size-8 flex items-center justify-center text-[#D00000]">
-              <span className="material-symbols-outlined text-[32px]">settings_suggest</span>
-            </div>
-            <h2 className="text-[#0d151c] text-xl font-bold leading-tight tracking-[-0.015em]">
-              B2B Auto Parts
-            </h2>
+          <Link href="/" className="flex items-center gap-3 text-[#0d151c] overflow-visible">
+            <Image
+              src="/logo.svg"
+              alt="Importadora Fidodido logo"
+              width={160}
+              height={64}
+              className="h-16 w-auto object-contain"
+              priority
+            />
+            <span className="sr-only">Importadora Fidodido</span>
           </Link>
           <div className="hidden lg:flex flex-1 justify-end gap-8">
             <nav className="flex items-center gap-9">
@@ -31,7 +35,7 @@ export default function Header() {
                 <Link
                   key={href}
                   href={href}
-                  className={`text-sm font-medium leading-normal transition-colors hover:text-[#D00000] ${
+                  className={`text-base font-medium leading-normal transition-colors hover:text-[#D00000] ${
                     pathname === href
                       ? 'text-[#D00000] font-semibold'
                       : 'text-[#0d151c]'

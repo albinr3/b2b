@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer() {
@@ -6,11 +7,16 @@ export default function Footer() {
       <div className="max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 text-white">
-              <div className="size-6 text-[#D00000] flex items-center justify-center">
-                <span className="material-symbols-outlined text-[24px]">settings_suggest</span>
-              </div>
-              <h2 className="text-lg font-bold leading-tight">B2B Auto Parts</h2>
+            <div className="flex items-center text-white">
+              <Image
+                src="/dark.svg"
+                alt="Importadora Fidodido logo"
+                width={240}
+                height={96}
+                className="h-14 w-auto object-contain"
+                priority
+              />
+              <span className="sr-only">Importadora Fidodido</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Líderes en distribución de repuestos automotrices de alta calidad para el mercado
@@ -69,7 +75,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">© {new Date().getFullYear()} B2B Auto Parts. Todos los derechos reservados.</p>
+          <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Importadora Fidodido. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

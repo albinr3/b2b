@@ -34,3 +34,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Notes
+
+- The brand has been renamed to **Importadora Fidodido**, and every public-facing copy (header, footer, hero, metadata) now reflects that name.
+- The contact form removes the previous "Empresa / Tienda" and "NIT / RUC" fields and now only asks for name, email, phone, province, and message, where the province dropdown lists all 32 Dominican provinces plus Distrito Nacional.
+- Tailwind colors are centralized in `src/app/globals.css`: `#D00000` for primary actions, `#FFBA08` for accents, `#0d151c` for main text, `#4b779b` for muted text, and `#f8f5f5` for the global background. Update them there when you need brand tweaks.

@@ -36,28 +36,8 @@ export default function ContactoPage() {
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
-                  <label className="flex flex-col flex-1">
-                    <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
-                      Empresa / Tienda
-                    </span>
-                    <input
-                      type="text"
-                      placeholder="Ej. Repuestos El Rápido"
-                      className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
-                    />
-                  </label>
                 </div>
                 <div className="flex flex-col md:flex-row gap-4">
-                  <label className="flex flex-col flex-1">
-                    <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
-                      NIT / RUC
-                    </span>
-                    <input
-                      type="text"
-                      placeholder="ID Tributaria"
-                      className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
-                    />
-                  </label>
                   <label className="flex flex-col flex-1">
                     <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
                       Correo Electrónico
@@ -76,7 +56,7 @@ export default function ContactoPage() {
                     </span>
                     <input
                       type="tel"
-                      placeholder="+54 11 1234 5678"
+                      placeholder="+1 809 123 4567"
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -89,10 +69,38 @@ export default function ContactoPage() {
                         <option value="" disabled>
                           Seleccione una opción
                         </option>
-                        <option value="BA">Buenos Aires</option>
-                        <option value="CD">Córdoba</option>
-                        <option value="SF">Santa Fe</option>
-                        <option value="MZ">Mendoza</option>
+                        <option value="AZ">Azua</option>
+                        <option value="BAH">Bahoruco</option>
+                        <option value="BA">Barahona</option>
+                        <option value="DAJ">Dajabón</option>
+                        <option value="DN">Distrito Nacional</option>
+                        <option value="DUR">Duarte</option>
+                        <option value="ELP">Elías Piña</option>
+                        <option value="ESB">El Seibo</option>
+                        <option value="ESP">Espaillat</option>
+                        <option value="HM">Hato Mayor</option>
+                        <option value="HER">Hermanas Mirabal</option>
+                        <option value="IND">Independencia</option>
+                        <option value="LAG">La Altagracia</option>
+                        <option value="LR">La Romana</option>
+                        <option value="LVE">La Vega</option>
+                        <option value="MTS">María Trinidad Sánchez</option>
+                        <option value="MON">Monseñor Nouel</option>
+                        <option value="MCR">Monte Cristi</option>
+                        <option value="MPL">Monte Plata</option>
+                        <option value="PED">Pedernales</option>
+                        <option value="PER">Peravia</option>
+                        <option value="PL">Puerto Plata</option>
+                        <option value="SAM">Samaná</option>
+                        <option value="SAR">Sánchez Ramírez</option>
+                        <option value="SC">San Cristóbal</option>
+                        <option value="SJO">San José de Ocoa</option>
+                        <option value="SJU">San Juan</option>
+                        <option value="SPM">San Pedro de Macorís</option>
+                        <option value="ST">Santiago</option>
+                        <option value="STR">Santiago Rodríguez</option>
+                        <option value="SD">Santo Domingo</option>
+                        <option value="VAL">Valverde</option>
                       </select>
                       <span className="material-symbols-outlined absolute right-4 top-3 text-[#4b779b] pointer-events-none">
                         expand_more
@@ -138,20 +146,21 @@ export default function ContactoPage() {
             <div className="lg:col-span-5 flex flex-col gap-6">
               <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm flex flex-col gap-8 h-fit sticky top-28">
                 <div>
-                  <h3 className="text-xl font-bold text-[#0d151c] mb-6">
-                    Información de Contacto
+                  <h3 className="text-xl font-bold text-[#0d151c] mb-1">
+                    Importadora Fidodidob(YR)
                   </h3>
+                  <p className="text-[#4b779b] text-sm leading-relaxed mb-6">
+                    Tienda de repuestos para automóviles en la República Dominicana
+                  </p>
                   <div className="flex flex-col gap-6">
                     <div className="flex gap-4 items-start">
                       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#e7eef3] text-[#D00000] shrink-0">
                         <span className="material-symbols-outlined">location_on</span>
                       </div>
                       <div>
-                        <p className="font-bold text-[#0d151c]">Oficina Central</p>
+                        <p className="font-bold text-[#0d151c]">Dirección</p>
                         <p className="text-[#4b779b] text-sm leading-relaxed mt-1">
-                          Av. del Libertador 1234, Piso 5
-                          <br />
-                          Buenos Aires, Argentina
+                          Carretera La Rosa, Moca 56000
                         </p>
                       </div>
                     </div>
@@ -160,25 +169,8 @@ export default function ContactoPage() {
                         <span className="material-symbols-outlined">call</span>
                       </div>
                       <div>
-                        <p className="font-bold text-[#0d151c]">Teléfonos</p>
-                        <p className="text-[#4b779b] text-sm leading-relaxed mt-1">
-                          +54 11 4444-5555
-                          <br />
-                          0800-123-AUTO (2886)
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4 items-start">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#e7eef3] text-[#D00000] shrink-0">
-                        <span className="material-symbols-outlined">mail</span>
-                      </div>
-                      <div>
-                        <p className="font-bold text-[#0d151c]">Email</p>
-                        <p className="text-[#4b779b] text-sm leading-relaxed mt-1">
-                          ventas@autopartesb2b.com
-                          <br />
-                          soporte@autopartesb2b.com
-                        </p>
+                        <p className="font-bold text-[#0d151c]">Teléfono</p>
+                        <p className="text-[#4b779b] text-sm leading-relaxed mt-1">(809) 578-1310</p>
                       </div>
                     </div>
                     <div className="flex gap-4 items-start">
@@ -187,42 +179,25 @@ export default function ContactoPage() {
                       </div>
                       <div>
                         <p className="font-bold text-[#0d151c]">Horario de Atención</p>
-                        <p className="text-[#4b779b] text-sm leading-relaxed mt-1">
-                          Lunes a Viernes: 08:00 - 18:00
-                          <br />
-                          Sábados: 09:00 - 13:00
-                        </p>
+                        <div className="text-[#4b779b] text-sm leading-relaxed mt-1 space-y-1">
+                          <p>Lunes a viernes: 8 a.m. – 6 p.m.</p>
+                          <p>Sábado: Cerrado</p>
+                          <p>Domingo: Cerrado</p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="w-full h-px bg-slate-100" />
-                <div className="bg-[#D00000]/5 rounded-lg p-5 border border-[#D00000]/10">
-                  <div className="flex items-start gap-3">
-                    <span className="material-symbols-outlined text-[#D00000] mt-1">verified_user</span>
-                    <div>
-                      <h4 className="font-bold text-[#D00000] text-base">
-                        Solicitar cuenta mayorista
-                      </h4>
-                      <p className="text-[#4b779b] text-sm mt-2 mb-4">
-                        Accede a precios especiales por volumen y gestión de pedidos exclusivos para distribuidores.
-                      </p>
-                      <a
-                        href="/distribuidores"
-                        className="inline-flex items-center text-sm font-bold text-[#D00000] hover:underline group"
-                      >
-                        Ver requisitos
-                        <span className="material-symbols-outlined text-[16px] ml-1 transition-transform group-hover:translate-x-1">
-                          arrow_forward
-                        </span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-lg overflow-hidden h-40 w-full mt-2 relative bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center group cursor-pointer">
-                  <span className="material-symbols-outlined text-4xl text-slate-400 group-hover:text-[#D00000] transition-colors">
-                    map
-                  </span>
+                <div className="rounded-lg overflow-hidden h-44 w-full mt-2">
+                  <iframe
+                    title="Mapa Importadora Fidodido"
+                    src="https://www.google.com/maps?q=Importadora+Fidodido+(YR+AUDIO)&output=embed"
+                    className="w-full h-full border-0"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 </div>
               </div>
             </div>

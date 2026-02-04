@@ -158,8 +158,8 @@ export default function HomePage() {
               href={cat.href}
               className="group flex flex-col gap-4 rounded-xl border border-[#e7eef3] border-t-2 border-t-[#FFBA08] bg-white p-6 items-center justify-center hover:shadow-md hover:border-[#D00000] transition-all duration-300"
             >
-              <div className="text-[#D00000] group-hover:scale-110 transition-transform duration-300">
-                <span className="material-symbols-outlined text-[32px]">{cat.icon}</span>
+              <div className="text-[#D00000] group-hover:scale-105 transition-transform duration-300">
+                <span className="material-symbols-outlined text-[64px] leading-none">{cat.icon}</span>
               </div>
               <h2 className="text-[#0d151c] text-base font-bold leading-tight text-center">
                 {cat.name}
@@ -174,7 +174,7 @@ export default function HomePage() {
         <div className="max-w-[1280px] mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-[#0d151c] text-[28px] font-bold leading-tight mb-4">
-              Por qué elegir B2B Auto Parts
+              Por qué elegir Importadora Fidodido
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
               Contamos con una amplia variedad de productos para las marcas más usadas en la República Dominicana.
@@ -262,8 +262,8 @@ export default function HomePage() {
                   'Soporte para promociones y lanzamientos',
                   'Condiciones comerciales claras y estables',
                 ].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-green-600">check_circle</span>
+                <div key={item} className="flex items-center gap-3">
+                    <span className="material-symbols-outlined text-[#FFBA08]">check_circle</span>
                     <span className="text-sm font-medium text-[#0d151c]">{item}</span>
                   </div>
                 ))}
