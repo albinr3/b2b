@@ -34,10 +34,14 @@ export default function CatalogClient({
   products,
   categories,
   activeCategory,
+  currentPage,
+  totalPages,
 }: {
   products: CatalogProduct[];
   categories: CategoryFilter[];
   activeCategory?: string | null;
+  currentPage: number;
+  totalPages: number;
 }) {
   const [columns, setColumns] = useState<ColumnCount>(3);
 
@@ -106,9 +110,8 @@ export default function CatalogClient({
                   className="flex items-center gap-3 cursor-pointer group"
                 >
                   <span
-                    className={`text-sm group-hover:text-[#D00000] transition-colors ${
-                      cat.active ? 'text-slate-900 font-medium' : 'text-slate-600'
-                    }`}
+                    className={`text-sm group-hover:text-[#D00000] transition-colors ${cat.active ? 'text-slate-900 font-medium' : 'text-slate-600'
+                      }`}
                   >
                     {cat.name}
                   </span>
@@ -169,7 +172,7 @@ export default function CatalogClient({
                     fill
                     className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    unoptimized
+                    loading="lazy"
                   />
                 </Link>
                 <div className="p-5 flex flex-col flex-1">
@@ -209,6 +212,45 @@ export default function CatalogClient({
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex items-center justify-center gap-2">
+              {currentPage > 1 ? (
+                <Link
+                  href={`/catalogo?${new URLSearchParams({ ...(activeCategory && { cat: activeCategory }), page: String(currentPage - 1) }).toString()}`}
+                  className="flex items-center gap-1 px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+                  Anterior
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1 px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-400 cursor-not-allowed">
+                  <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+                  Anterior
+                </span>
+              )}
+
+              <span className="px-4 py-2 text-sm text-slate-600">
+                Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong>
+              </span>
+
+              {currentPage < totalPages ? (
+                <Link
+                  href={`/catalogo?${new URLSearchParams({ ...(activeCategory && { cat: activeCategory }), page: String(currentPage + 1) }).toString()}`}
+                  className="flex items-center gap-1 px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  Siguiente
+                  <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1 px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-400 cursor-not-allowed">
+                  Siguiente
+                  <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                </span>
+              )}
+            </div>
+          )}
         </section>
       </div>
     </div>

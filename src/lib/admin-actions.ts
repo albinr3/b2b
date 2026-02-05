@@ -115,7 +115,7 @@ export async function createProduct(formData: FormData) {
       descripcion,
       referencia,
       slug: slugify(slugSource),
-      imageUrl: asString(formData.get('imageUrl')),
+      imageUrl: asString(formData.get('imageUrl')) || '/sin-imagen.webp',
       textoDescripcion: asString(formData.get('textoDescripcion')),
       categoryId: asNumber(formData.get('categoryId')) || null,
     },
@@ -190,6 +190,16 @@ export async function deleteProduct(formData: FormData) {
   if (!id) return;
   await prisma.product.delete({ where: { id } });
   revalidatePath('/admin/productos');
+}
+
+export async function deleteAllProductsAction(): Promise<ActionResult> {
+  try {
+    const result = await prisma.product.deleteMany({});
+    revalidatePath('/admin/productos');
+    return ok(`Se eliminaron ${result.count} productos`);
+  } catch {
+    return fail('No se pudieron eliminar los productos');
+  }
 }
 
 export async function createDistributor(formData: FormData) {

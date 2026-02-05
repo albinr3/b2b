@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#101a22] text-white pt-16 pb-8">
       <div className="max-w-[1280px] mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           <div className="flex flex-col gap-4">
             <div className="flex items-center text-white">
               <Image
@@ -69,6 +69,26 @@ export default function Footer() {
                 Cookies
               </Link>
             </div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider">Nuestras Marcas</h3>
+            <Link
+              href="https://yraudio.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex flex-col gap-3 p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all border border-white/10 hover:border-[#D00000]/30"
+            >
+              <Image
+                src="/YR AUDIO.png"
+                alt="YR Audio logo"
+                width={120}
+                height={48}
+                className="h-8 w-auto object-contain transition-opacity opacity-90 group-hover:opacity-100"
+              />
+              <p className="text-gray-400 text-xs leading-relaxed group-hover:text-gray-200 transition-colors">
+                Orgullosos de ser dueños de la marca <span className="text-white font-semibold">YR AUDIO</span>. Tecnología de sonido de alto rendimiento.
+              </p>
+            </Link>
           </div>
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">

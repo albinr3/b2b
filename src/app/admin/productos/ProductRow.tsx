@@ -84,7 +84,7 @@ export default function ProductRow({
                 fill
                 className="object-contain p-2"
                 sizes="64px"
-                unoptimized
+                loading="lazy"
               />
             </div>
             <div className="flex-1">

@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         hostname: 'lh3.googleusercontent.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-db000bf677ef4b89aebfffa3aea14be3.r2.dev',
+        pathname: '/**',
+      },
     ],
   },
   turbopack: {
