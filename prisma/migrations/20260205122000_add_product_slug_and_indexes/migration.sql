@@ -45,4 +45,14 @@ BEGIN
   ) THEN
     CREATE UNIQUE INDEX "Product_slug_key" ON "Product"("slug");
   END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'Product'
+      AND indexname = 'Product_categoryId_idx'
+  ) THEN
+    CREATE INDEX "Product_categoryId_idx" ON "Product"("categoryId");
+  END IF;
 END $$;

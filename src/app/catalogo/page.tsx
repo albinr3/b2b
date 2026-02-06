@@ -1,11 +1,15 @@
 import CatalogClient from './CatalogClient';
 import { prisma } from '@/lib/prisma';
+import { resolveProductImageUrl } from '@/lib/sku-image-map';
 
 const PRODUCTS_PER_PAGE = 24;
+const shouldLogPerf =
+  process.env.LOG_PERF === 'true' || process.env.NODE_ENV !== 'production';
 
 export default async function CatalogoPage(props: {
   searchParams?: Promise<{ cat?: string; page?: string }>;
 }) {
+  const t0 = Date.now();
   const searchParams = await props.searchParams;
   const activeCategory = searchParams?.cat?.trim() || null;
   const currentPage = Math.max(1, parseInt(searchParams?.page || '1', 10));
@@ -39,6 +43,7 @@ export default async function CatalogoPage(props: {
       },
     }),
   ]);
+  const t1 = Date.now();
 
   const totalPages = Math.ceil(totalCount / PRODUCTS_PER_PAGE);
 
@@ -49,17 +54,37 @@ export default async function CatalogoPage(props: {
     active: activeCategory === category.slug,
   }));
 
+  const productsWithImages = await Promise.all(
+    products.map(async (product) => ({
+      id: product.id,
+      slug: product.slug,
+      sku: product.sku,
+      descripcion: product.descripcion,
+      referencia: product.referencia,
+      imageUrl: await resolveProductImageUrl({
+        sku: product.sku,
+        imageUrl: product.imageUrl,
+      }),
+      categoryName: product.category?.name ?? null,
+    })),
+  );
+  const t2 = Date.now();
+
+  if (shouldLogPerf) {
+    console.log(
+      `[perf] catalogo query=${t1 - t0}ms images=${t2 - t1}ms total=${t2 - t0}ms`,
+      {
+        page: currentPage,
+        category: activeCategory,
+        products: products.length,
+        totalCount,
+      },
+    );
+  }
+
   return (
     <CatalogClient
-      products={products.map((product) => ({
-        id: product.id,
-        slug: product.slug,
-        sku: product.sku,
-        descripcion: product.descripcion,
-        referencia: product.referencia,
-        imageUrl: product.imageUrl,
-        categoryName: product.category?.name ?? null,
-      }))}
+      products={productsWithImages}
       categories={categoriesFilter}
       activeCategory={activeCategory}
       currentPage={currentPage}

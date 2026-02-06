@@ -24,6 +24,8 @@ model Product {
   textoDescripcion String
   categoryId      Int?
   category        Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId])
 }
 
 model Distributor {

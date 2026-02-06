@@ -2,10 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import { resolveProductImageUrl } from '@/lib/sku-image-map';
 
 const showSpecs = false;
+const shouldLogPerf =
+  process.env.LOG_PERF === 'true' || process.env.NODE_ENV !== 'production';
 
 export default async function ProductoPage({ params }: { params: Promise<{ id: string }> }) {
+  const t0 = Date.now();
   const { id } = await params;
   const numericId = Number(id);
 
@@ -17,6 +21,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
       : { slug: id },
     include: { category: true },
   });
+  const t1 = Date.now();
 
   if (!product) {
     notFound();
@@ -31,6 +36,34 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
     take: 4,
     orderBy: { id: 'desc' },
   });
+  const t2 = Date.now();
+
+  const productImageUrl = await resolveProductImageUrl({
+    sku: product.sku,
+    imageUrl: product.imageUrl,
+  });
+  const t3 = Date.now();
+  const relatedProductsWithImage = await Promise.all(
+    relatedProducts.map(async (p) => ({
+      ...p,
+      resolvedImageUrl: await resolveProductImageUrl({
+        sku: p.sku,
+        imageUrl: p.imageUrl,
+      }),
+    })),
+  );
+  const t4 = Date.now();
+
+  if (shouldLogPerf) {
+    console.log(
+      `[perf] producto query=${t1 - t0}ms related=${t2 - t1}ms image=${t3 - t2}ms relatedImages=${t4 - t3}ms total=${t4 - t0}ms`,
+      {
+        id,
+        resolvedId: product.id,
+        related: relatedProducts.length,
+      },
+    );
+  }
 
   return (
     <div className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -79,7 +112,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
         <div className="lg:col-span-7 flex flex-col gap-4">
           <div className="w-full aspect-[4/3] bg-white rounded-xl overflow-hidden border border-slate-200 flex items-center justify-center p-8 group relative">
             <Image
-              src={product.imageUrl || '/logo.svg'}
+              src={productImageUrl || '/logo.svg'}
               alt={product.descripcion || product.referencia || product.sku}
               fill
               className="object-contain p-6"
@@ -191,7 +224,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {relatedProducts.map((p) => (
+          {relatedProductsWithImage.map((p) => (
             <Link
               key={p.id}
               href={`/producto/${p.slug}`}
@@ -199,7 +232,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
             >
               <div className="aspect-[4/3] bg-slate-50 rounded-md mb-4 overflow-hidden">
                 <Image
-                  src={p.imageUrl || '/logo.svg'}
+                  src={p.resolvedImageUrl || '/logo.svg'}
                   alt={p.descripcion || p.referencia || p.sku}
                   width={300}
                   height={225}
