@@ -7,6 +7,7 @@ import { resolveProductImageUrl } from '@/lib/sku-image-map';
 import ShareProductButton from '@/components/ShareProductButton';
 
 const showSpecs = false;
+const specs: Array<{ label: string; value: string }> = [];
 const shouldLogPerf =
   process.env.LOG_PERF === 'true' || process.env.NODE_ENV !== 'production';
 

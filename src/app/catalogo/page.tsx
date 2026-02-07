@@ -2,6 +2,8 @@ import CatalogClient from './CatalogClient';
 import { prisma } from '@/lib/prisma';
 import { resolveProductImageUrl } from '@/lib/sku-image-map';
 import type { Prisma } from '@prisma/client';
+import { redirect } from 'next/navigation';
+import { getCatalogSession } from '@/lib/catalog-auth';
 
 const PRODUCTS_PER_PAGE = 36;
 const shouldLogPerf =
@@ -10,6 +12,11 @@ const shouldLogPerf =
 export default async function CatalogoPage(props: {
   searchParams?: Promise<{ cat?: string; page?: string; q?: string }>;
 }) {
+  const session = await getCatalogSession();
+  if (!session) {
+    redirect('/catalogo/login');
+  }
+
   const t0 = Date.now();
   const searchParams = await props.searchParams;
   const activeCategory = searchParams?.cat?.trim() || null;

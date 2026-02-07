@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { ADMIN_SESSION_COOKIE } from '@/lib/admin-auth-constants';
+import { CATALOG_SESSION_COOKIE } from '@/lib/catalog-auth-constants';
 
 const encoder = new TextEncoder();
 
@@ -48,29 +49,47 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminPath = pathname.startsWith('/admin');
   const isAdminApi = pathname.startsWith('/api/admin');
-  if (!isAdminPath && !isAdminApi) {
+  const isCatalogPath = pathname.startsWith('/catalogo');
+  if (!isAdminPath && !isAdminApi && !isCatalogPath) {
     return NextResponse.next();
   }
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-pathname', pathname);
 
-  const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
-  const hasSession = token ? Boolean(await verifySessionToken(token)) : false;
+  const adminToken = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  const hasAdminSession = adminToken ? Boolean(await verifySessionToken(adminToken)) : false;
   const isLogin = pathname.startsWith('/admin/login');
 
-  if (!hasSession && !isLogin && isAdminPath) {
+  if (!hasAdminSession && !isLogin && isAdminPath) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/login';
     const response = NextResponse.redirect(url);
-    if (token) {
+    if (adminToken) {
       response.cookies.set(ADMIN_SESSION_COOKIE, '', { path: '/', maxAge: 0 });
     }
     return response;
   }
 
-  if (!hasSession && isAdminApi) {
+  if (!hasAdminSession && isAdminApi) {
     return NextResponse.json({ ok: false, message: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (isCatalogPath) {
+    const isCatalogLogin = pathname.startsWith('/catalogo/login');
+    const catalogToken = request.cookies.get(CATALOG_SESSION_COOKIE)?.value;
+    const hasCatalogSession = catalogToken
+      ? Boolean(await verifySessionToken(catalogToken))
+      : false;
+    if (!hasCatalogSession && !isCatalogLogin) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/catalogo/login';
+      const response = NextResponse.redirect(url);
+      if (catalogToken) {
+        response.cookies.set(CATALOG_SESSION_COOKIE, '', { path: '/', maxAge: 0 });
+      }
+      return response;
+    }
   }
 
   return NextResponse.next({
@@ -81,5 +100,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/admin/:path*'],
+  matcher: ['/admin/:path*', '/api/admin/:path*', '/catalogo/:path*'],
 };
