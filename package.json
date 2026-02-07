@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node scripts/fix-lightningcss.js",
+    "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "node prisma/seed.js"
   },
   "dependencies": {

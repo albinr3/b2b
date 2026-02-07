@@ -2,10 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const stats = [
-  { label: 'Años abasteciendo talleres', value: '18+', icon: 'history' },
+  { label: 'Abasteciendo autoadornos y repuestos', value: '10+ Años', icon: 'history' },
   { label: 'SKUs activos en inventario', value: '10,000+', icon: 'inventory_2' },
-  { label: 'Entregas mensuales', value: '1,200+', icon: 'local_shipping' },
-  { label: 'Marcas aliadas', value: '12', icon: 'handshake' },
+  { label: 'Entregas mensuales', value: '5000+', icon: 'local_shipping' },
+  { label: 'Clientes a nivel nacional', value: '5000+', icon: 'handshake' },
 ];
 
 const values = [
@@ -27,6 +27,15 @@ const values = [
       'Asesoramos mezcla de producto, rotación y reposición para que tu mostrador no se quede vacío.',
     icon: 'support_agent',
   },
+];
+
+const coreValues = [
+  'Responsabilidad',
+  'Honestidad',
+  'Trabajo en equipo',
+  'Integridad',
+  'Desarrollo',
+  'Puntualidad',
 ];
 
 const milestones = [
@@ -96,7 +105,7 @@ export default function SobreNosotrosPage() {
             <div className="flex-1 w-full space-y-4">
               <div className="relative rounded-2xl overflow-hidden border border-[#e7eef3] shadow-sm">
                 <Image
-                  src="/pztn5zi5.lg-transformed-scaled.webp"
+                  src="/empresa.jpeg"
                   alt="Centro de distribución de repuestos"
                   width={720}
                   height={480}
@@ -132,6 +141,48 @@ export default function SobreNosotrosPage() {
                   Cifras referenciales basadas en nuestra operación B2B.
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="w-full bg-white border-t border-[#e7eef3]">
+        <div className="max-w-[1280px] mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-[#e7eef3] bg-[#f8f5f5] p-6 sm:p-8">
+              <span className="text-[#D00000] font-bold text-sm tracking-widest uppercase mb-2 block">
+                Mision
+              </span>
+              <p className="text-sm sm:text-base text-[#4b779b] leading-relaxed">
+                Satisfacer las necesidades de nuestros clientes, desarrollando productos innovadores
+                que impactan el mercado automotriz, ofreciendo el mejor servicio al cliente, gracias
+                a nuestro afan de superacion y equipo humano.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#e7eef3] bg-[#f8f5f5] p-6 sm:p-8">
+              <span className="text-[#D00000] font-bold text-sm tracking-widest uppercase mb-2 block">
+                Vision
+              </span>
+              <p className="text-sm sm:text-base text-[#4b779b] leading-relaxed">
+                Llegar a ser reconocidos internacionalmente, siendo YR nuestra marca insignia.
+                Siendo el proveedor de soluciones en productos automotrices, reconocidos por su
+                calidad y eficientes servicios.
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 rounded-2xl border border-[#e7eef3] bg-white p-6 sm:p-8">
+            <span className="text-[#D00000] font-bold text-sm tracking-widest uppercase mb-4 block">
+              Valores
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {coreValues.map((value) => (
+                <div
+                  key={value}
+                  className="rounded-xl border border-[#e7eef3] bg-[#f8f5f5] px-4 py-3 text-sm font-semibold text-[#0d151c]"
+                >
+                  {value}
+                </div>
+              ))}
             </div>
           </div>
         </div>

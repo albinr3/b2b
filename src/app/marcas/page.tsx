@@ -7,14 +7,14 @@ import Link from 'next/link';
 const brands = [
     {
         name: 'YR',
-        logo: 'https://placehold.co/200x80/png?text=YR',
+        logo: '/YR.png',
         description:
             'YR es la marca para el que sabe de calidad y no coge corte con su vehículo. Traemos repuestos premium fabricados con ingeniería de primera, hechos para aguantar la pela de nuestras calles. Cada pieza está probada para dar la talla, garantizando que su carro o camión ande como un general y usted maneje tranquilo.',
         href: '#',
     },
     {
         name: 'ENHD',
-        logo: 'https://placehold.co/200x80/png?text=ENHD',
+        logo: '/ENHD.png',
         description:
             'ENHD llegó para resolver. Es la opción inteligente para el que necesita arreglar su vehículo con piezas buenas sin desbaratar el bolsillo. Ofrecemos el balance perfecto entre calidad y precio para que su carro o camión siga rodando sin problemas. Mantenimiento efectivo que cuida su economía.',
         href: '#',
