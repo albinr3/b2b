@@ -40,10 +40,10 @@ const coreValues = [
 
 const milestones = [
   {
-    year: '2007',
+    year: '2015',
     title: 'Inicio del almacén central',
     description:
-      'Comenzamos como una operación familiar atendiendo a talleres locales con repuestos esenciales.',
+      'Comenzamos como una operación familiar atendiendo a repuestos locales con repuestos esenciales.',
     icon: 'warehouse',
   },
   {
@@ -83,7 +83,7 @@ export default function SobreNosotrosPage() {
                 Importadora Fidodido: aliados de tu inventario
               </h1>
               <p className="text-[#4b779b] text-base sm:text-lg leading-relaxed max-w-2xl">
-                Somos una importadora especializada en repuestos automotrices para tiendas y
+                Somos una importadora especializada en repuestos automotrices, auto adornos y equipos de musica para tiendas y
                 distribuidores. Nuestro foco es que tengas stock confiable, precios competitivos y
                 un despacho rápido para que tu negocio nunca se detenga.
               </p>
@@ -215,7 +215,7 @@ export default function SobreNosotrosPage() {
                 Nuestra historia
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-[#0d151c]">
-                Crecimos junto a los talleres que confían en nosotros
+                Crecimos junto a los repuestos que confían en nosotros
               </h2>
             </div>
             <p className="text-sm text-[#4b779b] max-w-xl">
