@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
                         data: {
                             descripcion,
                             referencia,
-                            imageUrl: imageUrl || '/sin-imagen.webp',
+                            imageUrl: imageUrl || '/no-photo.avif',
                             textoDescripcion,
                             categoryId,
                         },
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
                             slug: finalSlug,
                             descripcion,
                             referencia,
-                            imageUrl: imageUrl || '/sin-imagen.webp',
+                            imageUrl: imageUrl || '/no-photo.avif',
                             textoDescripcion,
                             categoryId,
                         },

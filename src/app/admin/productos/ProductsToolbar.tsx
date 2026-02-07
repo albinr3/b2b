@@ -143,34 +143,6 @@ export default function ProductsToolbar() {
                 </div>
             </div>
 
-            {/* Excel Import/Export */}
-            <div className="flex flex-wrap gap-2 items-center">
-                <button
-                    type="button"
-                    onClick={handleDownloadTemplate}
-                    className="h-10 px-4 rounded-lg border border-[#0d151c] text-[#0d151c] text-sm font-medium hover:bg-[#0d151c] hover:text-white transition-colors flex items-center gap-2"
-                >
-                    <span className="material-symbols-outlined text-[18px]">download</span>
-                    Descargar template Excel
-                </button>
-
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".xlsx,.xls"
-                    onChange={handleFileSelect}
-                    className="hidden"
-                    id="excel-upload"
-                />
-                <label
-                    htmlFor="excel-upload"
-                    className={`h-10 px-4 rounded-lg border border-[#0d151c] text-[#0d151c] text-sm font-medium hover:bg-[#0d151c] hover:text-white transition-colors flex items-center gap-2 cursor-pointer ${isUploading ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                >
-                    <span className="material-symbols-outlined text-[18px]">upload_file</span>
-                    {isUploading ? 'Importando...' : 'Importar Excel'}
-                </label>
-            </div>
         </div>
     );
 }

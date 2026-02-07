@@ -115,7 +115,7 @@ export async function createProduct(formData: FormData) {
       descripcion,
       referencia,
       slug: slugify(slugSource),
-      imageUrl: asString(formData.get('imageUrl')) || '/sin-imagen.webp',
+      imageUrl: asString(formData.get('imageUrl')) || '/no-photo.avif',
       textoDescripcion: asString(formData.get('textoDescripcion')),
       categoryId: asNumber(formData.get('categoryId')) || null,
     },

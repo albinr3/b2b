@@ -1,13 +1,5 @@
-import {
-  createProduct,
-  deleteProduct,
-  updateProduct,
-} from '@/lib/admin-actions';
 import { prisma } from '@/lib/prisma';
-import NewProductForm from './NewProductForm';
-import ProductRow from './ProductRow';
-import Pagination from './Pagination';
-import ProductsToolbar from './ProductsToolbar';
+import AdminProductsClient from './AdminProductsClient';
 
 const PRODUCTS_PER_PAGE = 50;
 
@@ -45,39 +37,19 @@ export default async function AdminProductosPage({
   ]);
 
   const totalPages = Math.ceil(totalCount / PRODUCTS_PER_PAGE);
+  const categoryOptions = categories.map((category) => ({
+    id: category.id,
+    name: category.name,
+  }));
 
   return (
-    <div className="flex flex-col gap-8">
-      <NewProductForm categories={categories.map((category) => ({ id: category.id, name: category.name }))} />
-
-      <section className="rounded-2xl border border-[#e7eef3] bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-[#0d151c]">Productos existentes</h2>
-          <span className="text-sm text-[#4b779b]">{totalCount} productos {searchQuery ? 'encontrados' : 'en total'}</span>
-        </div>
-
-        <ProductsToolbar />
-
-        <div className="flex flex-col gap-4 mt-6">
-          {products.length === 0 && (
-            <p className="text-sm text-[#4b779b]">
-              {searchQuery ? 'No se encontraron productos con ese criterio.' : 'Aún no hay productos registrados.'}
-            </p>
-          )}
-          {products.map((product) => (
-            <ProductRow
-              key={product.id}
-              product={product}
-              categories={categories.map((category) => ({ id: category.id, name: category.name }))}
-            />
-          ))}
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          basePath="/admin/productos"
-        />
-      </section>
-    </div>
+    <AdminProductsClient
+      products={products}
+      categories={categoryOptions}
+      totalCount={totalCount}
+      searchQuery={searchQuery}
+      currentPage={currentPage}
+      totalPages={totalPages}
+    />
   );
 }

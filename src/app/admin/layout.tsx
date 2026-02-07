@@ -1,5 +1,8 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { ToastProvider } from '@/components/ToastProvider';
+import { getAdminSession } from '@/lib/admin-auth';
+import AdminLoginPanel from './login/AdminLoginPanel';
 
 const navItems = [
   { href: '/admin', label: 'Panel' },
@@ -8,7 +11,19 @@ const navItems = [
   // { href: '/admin/distribuidores', label: 'Distribuidores' },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const headerList = await headers();
+  const pathname = headerList.get('x-pathname') || '';
+  const isLogin = pathname.startsWith('/admin/login');
+  const session = await getAdminSession();
+
+  if (isLogin) {
+    return <>{children}</>;
+  }
+  if (!session) {
+    return <AdminLoginPanel />;
+  }
+
   return (
     <ToastProvider>
       <div className="min-h-screen w-full bg-[#0b0f14]">
@@ -30,8 +45,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Link>
               ))}
             </nav>
-            <div className="mt-auto px-6 py-6 text-xs text-[#8aa4b8]">
-              Panel administrativo
+            <div className="mt-auto px-6 py-6 text-xs text-[#8aa4b8] flex items-center justify-between">
+              <span>Panel administrativo</span>
+              <Link
+                href="/admin/logout"
+                className="text-[#8aa4b8] hover:text-white transition-colors"
+              >
+                Cerrar sesión
+              </Link>
             </div>
           </aside>
           <main className="flex-1 bg-[#f8f5f5]">

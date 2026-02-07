@@ -3,12 +3,12 @@
 export default function ContactoPage() {
   return (
     <div className="layout-container flex h-full grow flex-col w-full">
-      <div className="px-5 md:px-20 lg:px-40 flex flex-1 justify-center py-10">
+      <div className="px-4 sm:px-6 md:px-20 lg:px-40 flex flex-1 justify-center py-10">
         <div className="layout-content-container flex flex-col max-w-[1200px] flex-1 w-full">
           {/* Page Heading */}
           <div className="flex flex-wrap justify-between gap-3 p-4 mb-8">
             <div className="flex flex-col gap-3">
-              <h1 className="text-[#0d151c] text-4xl font-black leading-tight tracking-[-0.033em]">
+              <h1 className="text-[#0d151c] text-3xl sm:text-4xl font-black leading-tight tracking-[-0.033em]">
                 Contáctanos
               </h1>
               <p className="text-[#4b779b] text-base font-normal leading-normal">
@@ -28,11 +28,12 @@ export default function ContactoPage() {
                 <div className="flex flex-col md:flex-row gap-4">
                   <label className="flex flex-col flex-1">
                     <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
-                      Nombre Completo
+                      Nombre Completo <span className="text-[#D00000]">*</span>
                     </span>
                     <input
                       type="text"
                       placeholder="Ej. Juan Pérez"
+                      required
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -40,11 +41,12 @@ export default function ContactoPage() {
                 <div className="flex flex-col md:flex-row gap-4">
                   <label className="flex flex-col flex-1">
                     <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
-                      Correo Electrónico
+                      Correo Electrónico <span className="text-[#D00000]">*</span>
                     </span>
                     <input
                       type="email"
                       placeholder="nombre@empresa.com"
+                      required
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -65,9 +67,12 @@ export default function ContactoPage() {
                       Provincia
                     </span>
                     <div className="relative">
-                      <select className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base appearance-none">
-                        <option value="" disabled>
-                          Seleccione una opción
+                      <select
+                        defaultValue=""
+                        className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base appearance-none"
+                      >
+                        <option value="" disabled hidden>
+                          Seleccionar
                         </option>
                         <option value="AZ">Azua</option>
                         <option value="BAH">Bahoruco</option>
@@ -110,11 +115,12 @@ export default function ContactoPage() {
                 </div>
                 <label className="flex flex-col w-full">
                   <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
-                    Mensaje
+                    Mensaje <span className="text-[#D00000]">*</span>
                   </span>
                   <textarea
                     placeholder="Escribe tu consulta aquí..."
                     rows={5}
+                    required
                     className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white min-h-[140px] p-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base resize-y"
                   />
                 </label>
@@ -144,10 +150,10 @@ export default function ContactoPage() {
 
             {/* Right: Info Card */}
             <div className="lg:col-span-5 flex flex-col gap-6">
-              <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm flex flex-col gap-8 h-fit sticky top-28">
+              <div className="bg-white rounded-xl p-8 border border-slate-100 shadow-sm flex flex-col gap-8 h-fit lg:sticky lg:top-28">
                 <div>
                   <h3 className="text-xl font-bold text-[#0d151c] mb-1">
-                    Importadora Fidodidob(YR)
+                    Importadora Fidodido (YR)
                   </h3>
                   <p className="text-[#4b779b] text-sm leading-relaxed mb-6">
                     Tienda de repuestos para automóviles en la República Dominicana

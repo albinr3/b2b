@@ -1,19 +1,28 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { resolveProductImageUrl } from '@/lib/sku-image-map';
+import ShareProductButton from '@/components/ShareProductButton';
 
 const showSpecs = false;
 const shouldLogPerf =
   process.env.LOG_PERF === 'true' || process.env.NODE_ENV !== 'production';
 
-export default async function ProductoPage({ params }: { params: Promise<{ id: string }> }) {
-  const t0 = Date.now();
-  const { id } = await params;
-  const numericId = Number(id);
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, '');
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'http://localhost:3000';
+}
 
-  const product = await prisma.product.findFirst({
+async function getProductByIdOrSlug(id: string) {
+  const numericId = Number(id);
+  return prisma.product.findFirst({
     where: Number.isFinite(numericId)
       ? {
           OR: [{ id: numericId }, { slug: id }],
@@ -21,6 +30,59 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
       : { slug: id },
     include: { category: true },
   });
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductByIdOrSlug(id);
+  if (!product) {
+    return {
+      title: 'Producto no encontrado',
+    };
+  }
+
+  const title = product.descripcion || product.referencia || product.sku;
+  const description = product.referencia
+    ? `Referencia: ${product.referencia} · SKU: ${product.sku}`
+    : `SKU: ${product.sku}`;
+  const imageUrl =
+    (await resolveProductImageUrl({ sku: product.sku, imageUrl: product.imageUrl })) ||
+    '/no-photo.avif';
+  const baseUrl = getBaseUrl();
+  const absoluteImage = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl}`;
+  const url = `${baseUrl}/producto/${product.slug ?? product.id}`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'product',
+      images: [
+        {
+          url: absoluteImage,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [absoluteImage],
+    },
+  };
+}
+
+export default async function ProductoPage({ params }: { params: Promise<{ id: string }> }) {
+  const t0 = Date.now();
+  const { id } = await params;
+  const product = await getProductByIdOrSlug(id);
   const t1 = Date.now();
 
   if (!product) {
@@ -112,7 +174,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
         <div className="lg:col-span-7 flex flex-col gap-4">
           <div className="w-full aspect-[4/3] bg-white rounded-xl overflow-hidden border border-slate-200 flex items-center justify-center p-8 group relative">
             <Image
-              src={productImageUrl || '/logo.svg'}
+              src={productImageUrl || '/no-photo.avif'}
               alt={product.descripcion || product.referencia || product.sku}
               fill
               className="object-contain p-6"
@@ -129,7 +191,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
               <span className="text-xs font-semibold text-[#D00000] bg-[#D00000]/10 px-2 py-0.5 rounded">
                 {product.category?.name?.toUpperCase() ?? 'PRODUCTO'}
               </span>
-              <div className="flex items-center gap-1.5 bg-slate-100 px-2 py-0.5 rounded text-xs">
+              <div className="hidden items-center gap-1.5 bg-slate-100 px-2 py-0.5 rounded text-xs">
                 <span className="w-2 h-2 rounded-full bg-green-500" />
                 <span className="font-semibold text-slate-500">STOCK DISPONIBLE</span>
               </div>
@@ -193,20 +255,16 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
               <span className="material-symbols-outlined group-hover:animate-pulse">mail</span>
               Solicitar información y cotización
             </Link>
-            <button
-              type="button"
-              className="w-full bg-white border border-slate-300 text-slate-700 font-medium py-3 px-6 rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
-            >
-              <span className="material-symbols-outlined text-[20px]">download</span>
-              Descargar ficha técnica (PDF)
-            </button>
+            <ShareProductButton
+              title={product.descripcion || product.referencia || product.sku}
+            />
           </div>
         </div>
       </div>
 
       {/* Related */}
-      <section className="mt-20 mb-10">
-        <div className="flex items-center justify-between mb-6">
+      <section className="mt-12 sm:mt-20 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <h3 className="text-xl font-bold text-slate-900">Productos Relacionados</h3>
           <div className="flex gap-2">
             <button
@@ -232,7 +290,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
             >
               <div className="aspect-[4/3] bg-slate-50 rounded-md mb-4 overflow-hidden">
                 <Image
-                  src={p.resolvedImageUrl || '/logo.svg'}
+                  src={p.resolvedImageUrl || '/no-photo.avif'}
                   alt={p.descripcion || p.referencia || p.sku}
                   width={300}
                   height={225}

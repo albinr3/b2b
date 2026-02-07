@@ -30,6 +30,7 @@ export default function ProductRow({
 }) {
   const [imageUrl, setImageUrl] = useState(product.imageUrl ?? '');
   const [previewUrl, setPreviewUrl] = useState(product.imageUrl ?? '');
+  const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputId = `product-image-${product.id}`;
   const { push } = useToast();
@@ -41,6 +42,12 @@ export default function ProductRow({
     ok: false,
     message: '',
   });
+  const handleDeleteSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const confirmed = window.confirm('¿Seguro que deseas eliminar este producto? Esta acción no se puede deshacer.');
+    if (!confirmed) {
+      event.preventDefault();
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -65,6 +72,9 @@ export default function ProductRow({
   useEffect(() => {
     if (!updateState?.message) return;
     push(updateState.message, updateState.ok ? 'success' : 'error');
+    if (updateState.ok) {
+      setIsOpen(false);
+    }
   }, [updateState, push]);
 
   useEffect(() => {
@@ -74,12 +84,21 @@ export default function ProductRow({
 
   return (
     <div className="rounded-xl border border-[#e7eef3] p-4 flex flex-col gap-4">
-      <details className="group">
+      <details
+        className="group"
+        open={isOpen}
+        onToggle={(event) => setIsOpen((event.target as HTMLDetailsElement).open)}
+      >
         <summary className="list-none cursor-pointer">
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="relative h-16 w-16 shrink-0 rounded-lg border border-[#e7eef3] bg-white overflow-hidden">
               <Image
-                src={product.imageUrl || '/logo.svg'}
+                src={
+                  product.imageUrl &&
+                  !['/sin-imagen.webp', '/logo.svg', '/no-photo.avif'].includes(product.imageUrl)
+                    ? product.imageUrl
+                    : '/no-photo.avif'
+                }
                 alt={product.descripcion || product.sku}
                 fill
                 className="object-contain p-2"
@@ -117,7 +136,7 @@ export default function ProductRow({
               >
                 <span className="material-symbols-outlined text-[20px]">edit</span>
               </button>
-              <form action={deleteAction}>
+              <form action={deleteAction} onSubmit={handleDeleteSubmit}>
                 <input type="hidden" name="id" value={product.id} />
                 <button
                   type="submit"
@@ -130,95 +149,121 @@ export default function ProductRow({
             </div>
           </div>
         </summary>
-        <div className="pt-4">
-          <form action={updateAction} className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input type="hidden" name="id" value={product.id} />
-            <input
-              name="sku"
-              defaultValue={product.sku}
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            />
-            <input
-              name="referencia"
-              defaultValue={product.referencia}
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            />
-            <input
-              name="descripcion"
-              defaultValue={product.descripcion}
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-              required
-            />
-            <input
-              name="slug"
-              defaultValue={product.slug ?? ''}
-              placeholder="Slug (opcional)"
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            />
-            <select
-              name="categoryId"
-              defaultValue={product.categoryId ?? ''}
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            >
-              <option value="">Sin categoría</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <input
-              name="imageUrl"
-              placeholder="URL de imagen"
-              value={imageUrl}
-              onChange={handleUrlChange}
-              className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            />
-            <input
-              ref={fileInputRef}
-              id={fileInputId}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-            <div className="md:col-span-3 flex items-center gap-4">
-              <label
-                htmlFor={fileInputId}
-                className="relative h-20 w-20 rounded-lg border border-[#e7eef3] bg-white overflow-hidden flex items-center justify-center cursor-pointer hover:border-[#D00000] transition-colors"
-              >
-                {preview ? (
-                  <Image
-                    src={preview}
-                    alt="Vista previa"
-                    fill
-                    className="object-contain p-2"
-                    sizes="80px"
-                    unoptimized
-                  />
-                ) : (
-                  <span className="material-symbols-outlined text-[32px] text-slate-300">
-                    upload
-                  </span>
-                )}
+        {isOpen && (
+          <div className="pt-4">
+            <form action={updateAction} className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <input type="hidden" name="id" value={product.id} />
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">SKU</span>
+                <input
+                  name="sku"
+                  defaultValue={product.sku}
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                />
               </label>
-              <p className="text-xs text-[#4b779b]">
-                Puedes subir una imagen o pegar una URL.
-              </p>
-            </div>
-            <textarea
-              name="textoDescripcion"
-              defaultValue={product.textoDescripcion}
-              className="md:col-span-3 min-h-[90px] rounded-lg border border-[#cfdde8] p-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
-            />
-            <button
-              type="submit"
-              className="h-10 rounded-lg border border-[#D00000] text-[#D00000] font-semibold hover:bg-[#D00000] hover:text-white transition-colors md:col-span-3"
-            >
-              Guardar cambios
-            </button>
-          </form>
-        </div>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">Referencia</span>
+                <input
+                  name="referencia"
+                  defaultValue={product.referencia}
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                />
+              </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">Descripción corta</span>
+                <input
+                  name="descripcion"
+                  defaultValue={product.descripcion}
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                  required
+                />
+              </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">Slug (opcional)</span>
+                <input
+                  name="slug"
+                  defaultValue={product.slug ?? ''}
+                  placeholder="Slug (opcional)"
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                />
+              </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">Categoría</span>
+                <select
+                  name="categoryId"
+                  defaultValue={product.categoryId ?? ''}
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                >
+                  <option value="">Sin categoría</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">URL de imagen</span>
+                <input
+                  name="imageUrl"
+                  placeholder="URL de imagen"
+                  value={imageUrl}
+                  onChange={handleUrlChange}
+                  className="h-10 rounded-lg border border-[#cfdde8] px-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                />
+              </label>
+              <input
+                ref={fileInputRef}
+                id={fileInputId}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <div className="md:col-span-3 flex items-center gap-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold text-[#4b779b]">Imagen</span>
+                  <label
+                    htmlFor={fileInputId}
+                    className="relative h-20 w-20 rounded-lg border border-[#e7eef3] bg-white overflow-hidden flex items-center justify-center cursor-pointer hover:border-[#D00000] transition-colors"
+                  >
+                    {preview ? (
+                      <Image
+                        src={preview}
+                        alt="Vista previa"
+                        fill
+                        className="object-contain p-2"
+                        sizes="80px"
+                        unoptimized
+                      />
+                    ) : (
+                      <span className="material-symbols-outlined text-[32px] text-slate-300">
+                        upload
+                      </span>
+                    )}
+                  </label>
+                </div>
+                <p className="text-xs text-[#4b779b]">
+                  Puedes subir una imagen o pegar una URL.
+                </p>
+              </div>
+              <label className="md:col-span-3 flex flex-col gap-1">
+                <span className="text-xs font-semibold text-[#4b779b]">Descripción completa</span>
+                <textarea
+                  name="textoDescripcion"
+                  defaultValue={product.textoDescripcion}
+                  className="min-h-[90px] rounded-lg border border-[#cfdde8] p-3 text-sm focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000]"
+                />
+              </label>
+              <button
+                type="submit"
+                className="h-10 rounded-lg border border-[#D00000] text-[#D00000] font-semibold hover:bg-[#D00000] hover:text-white transition-colors md:col-span-3"
+              >
+                Guardar cambios
+              </button>
+            </form>
+          </div>
+        )}
       </details>
     </div>
   );

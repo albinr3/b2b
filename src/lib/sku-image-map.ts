@@ -20,6 +20,7 @@ const EXT_PRIORITY: Record<string, number> = {
 const PLACEHOLDER_IMAGE_URLS = new Set([
   '',
   '/sin-imagen.webp',
+  '/no-photo.avif',
   '/logo.svg',
 ]);
 

@@ -51,14 +51,14 @@ const brands = [
 
 export default function MarcasPage() {
     return (
-        <div className="bg-[#f8f9fa] min-h-screen py-20">
+        <div className="bg-[#f8f9fa] min-h-screen py-14 sm:py-20">
             <div className="max-w-[1280px] mx-auto px-6">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 border-b border-[#e7eef3] pb-8">
                     <div className="max-w-2xl">
                         <span className="text-[#D00000] font-bold text-sm tracking-widest uppercase mb-2 block">
                             Nuestros Aliados
                         </span>
-                        <h1 className="text-4xl md:text-5xl font-black text-[#0d151c] tracking-tight leading-tight">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0d151c] tracking-tight leading-tight">
                             Marcas que mueven <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0d151c] to-slate-500">el mundo automotriz</span>
                         </h1>
                     </div>
