@@ -63,7 +63,7 @@ export async function generateMetadata({
       title,
       description,
       url,
-      type: 'product',
+      type: 'website',
       images: [
         {
           url: absoluteImage,
