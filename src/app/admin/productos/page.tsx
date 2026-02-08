@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { resolveProductImageUrl } from '@/lib/sku-image-map';
 import AdminProductsClient from './AdminProductsClient';
 
 const PRODUCTS_PER_PAGE = 50;
@@ -41,10 +42,18 @@ export default async function AdminProductosPage({
     id: category.id,
     name: category.name,
   }));
+  const productsWithResolvedImage = await Promise.all(
+    products.map(async (product) => ({
+      ...product,
+      resolvedImageUrl:
+        (await resolveProductImageUrl({ sku: product.sku, imageUrl: product.imageUrl })) ||
+        '/no-photo.avif',
+    })),
+  );
 
   return (
     <AdminProductsClient
-      products={products}
+      products={productsWithResolvedImage}
       categories={categoryOptions}
       totalCount={totalCount}
       searchQuery={searchQuery}

@@ -17,6 +17,7 @@ type ProductItem = {
   descripcion: string;
   referencia: string;
   imageUrl: string | null;
+  resolvedImageUrl: string;
   textoDescripcion: string;
   categoryId: number | null;
 };
@@ -29,7 +30,9 @@ export default function ProductRow({
   categories: CategoryOption[];
 }) {
   const [imageUrl, setImageUrl] = useState(product.imageUrl ?? '');
-  const [previewUrl, setPreviewUrl] = useState(product.imageUrl ?? '');
+  const [previewUrl, setPreviewUrl] = useState(
+    product.imageUrl || product.resolvedImageUrl || '',
+  );
   const [isOpen, setIsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputId = `product-image-${product.id}`;
@@ -93,17 +96,13 @@ export default function ProductRow({
           <div className="flex flex-col md:flex-row md:items-center gap-4">
             <div className="relative h-16 w-16 shrink-0 rounded-lg border border-[#e7eef3] bg-white overflow-hidden">
               <Image
-                src={
-                  product.imageUrl &&
-                  !['/sin-imagen.webp', '/logo.svg', '/no-photo.avif'].includes(product.imageUrl)
-                    ? product.imageUrl
-                    : '/no-photo.avif'
-                }
+                src={product.resolvedImageUrl || '/no-photo.avif'}
                 alt={product.descripcion || product.sku}
                 fill
                 className="object-contain p-2"
                 sizes="64px"
                 loading="lazy"
+                unoptimized
               />
             </div>
             <div className="flex-1">

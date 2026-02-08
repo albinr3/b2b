@@ -17,6 +17,7 @@ type ProductItem = {
   descripcion: string;
   referencia: string;
   imageUrl: string | null;
+  resolvedImageUrl: string;
   textoDescripcion: string;
   categoryId: number | null;
 };
