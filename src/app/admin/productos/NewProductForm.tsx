@@ -107,6 +107,16 @@ export default function NewProductForm({ categories }: { categories: CategoryOpt
             <span className="material-symbols-outlined text-[18px]">upload_file</span>
             {isUploading ? 'Importando...' : 'Importar Excel'}
           </label>
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = '/api/admin/export-products';
+            }}
+            className="h-10 px-3 rounded-lg border border-[#0d151c] text-[#0d151c] text-sm font-medium hover:bg-[#0d151c] hover:text-white transition-colors flex items-center gap-1"
+          >
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            Exportar Excel
+          </button>
 
           <button
             type="button"
