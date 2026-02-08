@@ -17,6 +17,12 @@ function getSecret() {
   );
 }
 
+function getCookieDomain() {
+  const fromEnv = process.env.SESSION_COOKIE_DOMAIN?.trim();
+  if (!fromEnv) return undefined;
+  return fromEnv;
+}
+
 function sign(payload: string) {
   return createHmac('sha256', getSecret()).update(payload).digest('base64url');
 }
@@ -53,6 +59,7 @@ export async function setCatalogSession(code: string) {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
+    domain: getCookieDomain(),
     path: '/',
     maxAge: SESSION_TTL_DAYS * 24 * 60 * 60,
   });
@@ -64,6 +71,7 @@ export async function clearCatalogSession() {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
+    domain: getCookieDomain(),
     path: '/',
     maxAge: 0,
   });

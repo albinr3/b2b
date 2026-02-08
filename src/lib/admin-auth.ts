@@ -21,6 +21,12 @@ function getSecret() {
   );
 }
 
+function getCookieDomain() {
+  const fromEnv = process.env.SESSION_COOKIE_DOMAIN?.trim();
+  if (!fromEnv) return undefined;
+  return fromEnv;
+}
+
 export function hashPassword(password: string) {
   const salt = randomBytes(16).toString('hex');
   const hash = scryptSync(password, salt, SCRYPT_KEYLEN, SCRYPT_OPTS).toString('hex');
@@ -68,6 +74,7 @@ export async function setAdminSession(payload: Omit<SessionPayload, 'exp'>) {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
+    domain: getCookieDomain(),
     path: '/',
     maxAge: SESSION_TTL_DAYS * 24 * 60 * 60,
   });
@@ -79,6 +86,7 @@ export async function clearAdminSession() {
     httpOnly: true,
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
+    domain: getCookieDomain(),
     path: '/',
     maxAge: 0,
   });
