@@ -32,6 +32,9 @@ Variables mínimas en Vercel:
 - `SYNC_API_TOKEN`
 - variables de R2 (`R2_*` y `NEXT_PUBLIC_R2_PUBLIC_URL`)
 - `NEXT_PUBLIC_SITE_URL`
+- `RESEND_API_KEY` (envío de correos desde `/contacto`)
+- `CONTACT_TO_EMAIL` (correo que recibe los mensajes de contacto)
+- `CONTACT_FROM_EMAIL` (remitente verificado en Resend; opcional, default: `onboarding@resend.dev`)
 
 ## Sincronización diaria (PostgreSQL local -> Vercel -> Supabase)
 

@@ -1,6 +1,71 @@
 'use client';
 
+import { useState, type ChangeEvent, type FormEvent } from 'react';
+
+type ContactFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  province: string;
+  message: string;
+  isDistributor: boolean;
+};
+
+const INITIAL_FORM: ContactFormData = {
+  name: '',
+  email: '',
+  phone: '',
+  province: '',
+  message: '',
+  isDistributor: false,
+};
+
 export default function ContactoPage() {
+  const [form, setForm] = useState<ContactFormData>(INITIAL_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<{ ok: boolean; message: string } | null>(null);
+
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = event.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckbox = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    setForm((prev) => ({ ...prev, [name]: checked }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFeedback(null);
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+      const result = (await response.json()) as { ok?: boolean; message?: string };
+      if (!response.ok || !result.ok) {
+        setFeedback({
+          ok: false,
+          message: result.message || 'No se pudo enviar el mensaje. Intenta nuevamente.',
+        });
+        return;
+      }
+      setFeedback({ ok: true, message: 'Mensaje enviado. Te contactaremos pronto.' });
+      setForm(INITIAL_FORM);
+    } catch {
+      setFeedback({ ok: false, message: 'Error de red al enviar el mensaje.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="layout-container flex h-full grow flex-col w-full">
       <div className="px-4 sm:px-6 md:px-20 lg:px-40 flex flex-1 justify-center py-10">
@@ -24,16 +89,19 @@ export default function ContactoPage() {
               <h2 className="text-[#0d151c] tracking-tight text-[28px] font-bold leading-tight pb-6">
                 Envíanos un mensaje
               </h2>
-              <form className="flex flex-col gap-6">
+              <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                 <div className="flex flex-col md:flex-row gap-4">
                   <label className="flex flex-col flex-1">
                     <span className="text-[#0d151c] text-sm font-medium leading-normal pb-2">
                       Nombre Completo <span className="text-[#D00000]">*</span>
                     </span>
                     <input
+                      name="name"
                       type="text"
                       placeholder="Ej. Juan Pérez"
                       required
+                      value={form.name}
+                      onChange={handleChange}
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -44,9 +112,12 @@ export default function ContactoPage() {
                       Correo Electrónico <span className="text-[#D00000]">*</span>
                     </span>
                     <input
+                      name="email"
                       type="email"
                       placeholder="nombre@empresa.com"
                       required
+                      value={form.email}
+                      onChange={handleChange}
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -57,8 +128,11 @@ export default function ContactoPage() {
                       Teléfono
                     </span>
                     <input
+                      name="phone"
                       type="tel"
                       placeholder="+1 809 123 4567"
+                      value={form.phone}
+                      onChange={handleChange}
                       className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base"
                     />
                   </label>
@@ -68,7 +142,9 @@ export default function ContactoPage() {
                     </span>
                     <div className="relative">
                       <select
-                        defaultValue=""
+                        name="province"
+                        value={form.province}
+                        onChange={handleChange}
                         className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white h-12 px-4 focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base appearance-none"
                       >
                         <option value="" disabled hidden>
@@ -118,9 +194,12 @@ export default function ContactoPage() {
                     Mensaje <span className="text-[#D00000]">*</span>
                   </span>
                   <textarea
+                    name="message"
                     placeholder="Escribe tu consulta aquí..."
                     rows={5}
                     required
+                    value={form.message}
+                    onChange={handleChange}
                     className="w-full rounded-lg text-[#0d151c] border border-[#cfdde8] bg-white min-h-[140px] p-4 placeholder:text-[#4b779b] focus:ring-2 focus:ring-[#D00000]/20 focus:border-[#D00000] transition-all text-base resize-y"
                   />
                 </label>
@@ -128,6 +207,9 @@ export default function ContactoPage() {
                   <input
                     type="checkbox"
                     id="isDistributor"
+                    name="isDistributor"
+                    checked={form.isDistributor}
+                    onChange={handleCheckbox}
                     className="h-5 w-5 rounded border-gray-300 text-[#D00000] focus:ring-[#D00000] cursor-pointer"
                   />
                   <label
@@ -138,11 +220,17 @@ export default function ContactoPage() {
                   </label>
                 </div>
                 <div className="pt-4">
+                  {feedback && (
+                    <p className={`mb-3 text-sm ${feedback.ok ? 'text-green-700' : 'text-red-700'}`}>
+                      {feedback.message}
+                    </p>
+                  )}
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full md:w-auto min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-[#D00000] hover:bg-[#b00000] transition-colors text-white text-base font-bold leading-normal tracking-[0.015em] shadow-lg shadow-[#D00000]/30"
                   >
-                    Enviar Mensaje
+                    {isSubmitting ? 'Enviando...' : 'Enviar Mensaje'}
                   </button>
                 </div>
               </form>
