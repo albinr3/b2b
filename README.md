@@ -1,39 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# B2B Auto Parts
 
-## Getting Started
+Aplicación Next.js + Prisma para catálogo B2B de productos automotrices.
 
-First, run the development server:
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy (Vercel + Supabase)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El build de Vercel usa:
 
-## Learn More
+```bash
+npm run vercel-build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Ese script ejecuta:
+1. `prisma generate`
+2. `prisma migrate deploy`
+3. `next build --webpack`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Variables mínimas en Vercel:
+- `DATABASE_URL` (Supabase pooler 6543)
+- `DIRECT_URL` (Supabase pooler/session 5432 con `?sslmode=require`)
+- `ADMIN_AUTH_SECRET`
+- `CATALOG_AUTH_SECRET`
+- `SYNC_API_TOKEN`
+- variables de R2 (`R2_*` y `NEXT_PUBLIC_R2_PUBLIC_URL`)
+- `NEXT_PUBLIC_SITE_URL`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Sincronización diaria (PostgreSQL local -> Vercel -> Supabase)
 
-## Deploy on Vercel
+### Arquitectura
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. El sistema origen mantiene su PostgreSQL en red local.
+2. Un script en la PC local lee cambios por `updated_at`.
+3. El script hace `POST` a una API privada en Vercel.
+4. La API hace `upsert` en Supabase por `sku`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Flujo:
+`PostgreSQL local -> scripts/sync-products-to-vercel.js -> /api/sync/products -> Supabase`
+
+### Modelo de datos usado para sync
+
+En `Product`:
+- `sku` es `@unique` (clave estable de sincronización).
+- `updatedAt` (`@updatedAt`) para auditoría en destino.
+- `sourceUpdatedAt` para control de frescura del dato origen.
+- `isActive` para borrado lógico (no físico).
+
+### API privada de sync
+
+Ruta:
+- `POST /api/sync/products`
+
+Archivo:
+- `src/app/api/sync/products/route.ts`
+
+Autenticación:
+- Header `x-sync-token`
+- Debe coincidir con `SYNC_API_TOKEN` en Vercel
+
+Payload:
+
+```json
+{
+  "products": [
+    {
+      "sku": "ABC123",
+      "descripcion": "Filtro de aceite",
+      "referencia": "REF-001",
+      "textoDescripcion": "Detalle opcional",
+      "imageUrl": "/no-photo.avif",
+      "categoryName": "Filtros",
+      "sourceUpdatedAt": "2026-02-08T12:00:00.000Z",
+      "isActive": true
+    }
+  ],
+  "deactivateSkus": ["SKU-OLD-1"]
+}
+```
+
+Respuesta incluye resumen:
+- `created`
+- `updated`
+- `skipped`
+- `deactivated`
+- `errors`
+
+### Script local de sincronización
+
+Archivo:
+- `scripts/sync-products-to-vercel.js`
+
+Comando:
+
+```bash
+npm run sync:products-to-vercel
+```
+
+Variables requeridas en la PC local:
+- `SOURCE_DB_URL` o `SOURCE_DATABASE_URL` (PostgreSQL origen local)
+- `SYNC_API_URL` (`https://tu-dominio.com/api/sync/products`)
+- `SYNC_API_TOKEN` (mismo valor que Vercel)
+
+Variables opcionales:
+- `SYNC_STATE_FILE` (default: `scripts/sync-state.json`)
+- `SYNC_LOG_FILE` (default: `scripts/sync.log`)
+- `SYNC_BATCH_SIZE` (default: `200`)
+- `SYNC_RETRIES` (default: `3`)
+- `SOURCE_PRODUCTS_QUERY` (query personalizada de extracción)
+- `SOURCE_DEACTIVATE_QUERY` (query personalizada de desactivaciones)
+
+Comportamiento:
+1. Lee `lastSync` del state file.
+2. Extrae cambios `updated_at > lastSync`.
+3. Envía lotes a la API.
+4. Si todo sale bien, actualiza `lastSync`.
+5. Si falla, mantiene `lastSync` anterior para reintento seguro.
+
+### Tarea programada (Windows)
+
+Configurar en Task Scheduler (PC con DB local):
+1. Trigger: diario, hora fija.
+2. Acción: ejecutar `node` con `scripts/sync-products-to-vercel.js`.
+3. Reintentos recomendados: 3 intentos cada 15 minutos.
+
+## Migración inicial de datos a Supabase
+
+Script:
+- `scripts/migrate-dev-to-supabase.js`
+
+Comando:
+
+```bash
+npm run migrate:dev-to-supabase -- --force
+```
+
+Variables:
+- `SOURCE_DATABASE_URL` (origen)
+- `DIRECT_URL` o `TARGET_DATABASE_URL` (destino)
+
+Este script reemplaza datos destino en:
+- `Category`
+- `Product`
+- `Distributor`
+- `AdminUser`
 
 ## Notes
 

@@ -77,7 +77,7 @@ async function importProducts(filePath) {
             console.log(`Processing SKU: ${sku}`);
 
             // Check if product exists by SKU (since SKU is not @unique in schema)
-            const existingProduct = await prisma.product.findFirst({
+            const existingProduct = await prisma.product.findUnique({
                 where: { sku: sku },
             });
 
@@ -91,6 +91,7 @@ async function importProducts(filePath) {
                         imageUrl,
                         textoDescripcion,
                         categoryId,
+                        isActive: true,
                     },
                 });
             } else {
@@ -120,6 +121,7 @@ async function importProducts(filePath) {
                         imageUrl: imageUrl || '/sin-imagen.webp',
                         textoDescripcion,
                         categoryId,
+                        isActive: true,
                     },
                 });
             }

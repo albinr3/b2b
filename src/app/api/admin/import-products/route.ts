@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
                 }
 
                 // Check if product exists
-                const existingProduct = await prisma.product.findFirst({
+                const existingProduct = await prisma.product.findUnique({
                     where: { sku: sku },
                 });
 
@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
                             imageUrl: imageUrl || '/no-photo.avif',
                             textoDescripcion,
                             categoryId,
+                            isActive: true,
                         },
                     });
                     updated++;
@@ -107,6 +108,7 @@ export async function POST(request: NextRequest) {
                             imageUrl: imageUrl || '/no-photo.avif',
                             textoDescripcion,
                             categoryId,
+                            isActive: true,
                         },
                     });
                     created++;

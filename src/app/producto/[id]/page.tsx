@@ -26,9 +26,10 @@ async function getProductByIdOrSlug(id: string) {
   return prisma.product.findFirst({
     where: Number.isFinite(numericId)
       ? {
+          isActive: true,
           OR: [{ id: numericId }, { slug: id }],
         }
-      : { slug: id },
+      : { slug: id, isActive: true },
     include: { category: true },
   });
 }
@@ -93,6 +94,7 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
   const relatedProducts = await prisma.product.findMany({
     where: {
       id: { not: product.id },
+      isActive: true,
       categoryId: product.categoryId ?? undefined,
     },
     include: { category: true },

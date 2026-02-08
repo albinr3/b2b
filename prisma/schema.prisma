@@ -16,17 +16,21 @@ model Category {
 }
 
 model Product {
-  id              Int       @id @default(autoincrement())
-  slug            String    @unique
-  sku             String
-  descripcion     String
-  referencia      String
-  imageUrl        String
+  id               Int       @id @default(autoincrement())
+  slug             String    @unique
+  sku              String    @unique
+  descripcion      String
+  referencia       String
+  imageUrl         String
   textoDescripcion String
-  categoryId      Int?
-  category        Category? @relation(fields: [categoryId], references: [id])
+  isActive         Boolean   @default(true)
+  sourceUpdatedAt  DateTime?
+  updatedAt        DateTime  @updatedAt
+  categoryId       Int?
+  category         Category? @relation(fields: [categoryId], references: [id])
 
   @@index([categoryId])
+  @@index([isActive])
 }
 
 model Distributor {

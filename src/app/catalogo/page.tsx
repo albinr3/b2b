@@ -24,7 +24,7 @@ export default async function CatalogoPage(props: {
   const currentPage = Math.max(1, parseInt(searchParams?.page || '1', 10));
   const skip = (currentPage - 1) * PRODUCTS_PER_PAGE;
 
-  const filters: Prisma.ProductWhereInput[] = [];
+  const filters: Prisma.ProductWhereInput[] = [{ isActive: true }];
   if (activeCategory) {
     filters.push({
       category: {
@@ -73,7 +73,7 @@ export default async function CatalogoPage(props: {
       orderBy: { name: 'asc' },
       include: {
         _count: {
-          select: { products: true },
+          select: { products: { where: { isActive: true } } },
         },
       },
     }),

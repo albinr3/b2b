@@ -10,7 +10,9 @@
     "lint": "eslint",
     "postinstall": "node scripts/fix-lightningcss.js",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "node prisma/seed.js"
+    "prisma:seed": "node prisma/seed.js",
+    "migrate:dev-to-supabase": "node scripts/migrate-dev-to-supabase.js",
+    "sync:products-to-vercel": "node scripts/sync-products-to-vercel.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.982.0",
