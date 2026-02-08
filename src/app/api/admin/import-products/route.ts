@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import * as xlsx from 'xlsx';
+import { verifySessionToken } from '@/lib/admin-auth';
+import { ADMIN_SESSION_COOKIE } from '@/lib/admin-auth-constants';
 
 const prisma = new PrismaClient();
 
@@ -16,6 +18,11 @@ function createSlug(text: string) {
 
 export async function POST(request: NextRequest) {
     try {
+        const token = request.cookies.get(ADMIN_SESSION_COOKIE)?.value || '';
+        if (!token || !verifySessionToken(token)) {
+            return NextResponse.json({ ok: false, message: 'Unauthorized' }, { status: 401 });
+        }
+
         const formData = await request.formData();
         const file = formData.get('file') as File;
 
