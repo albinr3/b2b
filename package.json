@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build --webpack",
+    "vercel-build": "prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node scripts/fix-lightningcss.js",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:prod": "powershell -ExecutionPolicy Bypass -File scripts/migrate-prod-supabase.ps1 deploy",
+    "prisma:migrate:prod:status": "powershell -ExecutionPolicy Bypass -File scripts/migrate-prod-supabase.ps1 status",
     "prisma:seed": "node prisma/seed.js",
     "migrate:dev-to-supabase": "node scripts/migrate-dev-to-supabase.js",
     "sync:products-to-vercel": "node scripts/sync-products-to-vercel.js"
