@@ -16,22 +16,13 @@ if (Test-Path $envFile) {
   }
 }
 
-$prodDatabaseUrl = $env:PROD_DATABASE_URL
-if (-not $prodDatabaseUrl) {
-  $prodDatabaseUrl = $env:DATABASE_URL_PROD
-}
-
 $prodDirectUrl = $env:PROD_DIRECT_URL
 if (-not $prodDirectUrl) {
-  $prodDirectUrl = $prodDatabaseUrl
-}
-
-if (-not $prodDatabaseUrl) {
-  Write-Error "PROD_DATABASE_URL (o DATABASE_URL_PROD) no está configurada en .env"
+  Write-Error "PROD_DIRECT_URL no está configurada en .env"
   exit 1
 }
 
-$env:DATABASE_URL = $prodDatabaseUrl
+$env:DATABASE_URL = $prodDirectUrl
 $env:DIRECT_URL = $prodDirectUrl
 
 npx prisma migrate $Action
