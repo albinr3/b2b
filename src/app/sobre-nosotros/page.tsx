@@ -41,30 +41,30 @@ const coreValues = [
 const milestones = [
   {
     year: '2015',
-    title: 'Inicio del almacén central',
+    title: 'Nacimiento de Importadora YSMAEL RODRIGUEZ EIRL',
     description:
-      'Comenzamos como una operación familiar atendiendo a repuestos locales con repuestos esenciales.',
+      'Iniciamos en La Rosa, Moca, República Dominicana, como un pequeño negocio para suplir accesorios automotrices a precios asequibles y de calidad.',
     icon: 'warehouse',
   },
   {
-    year: '2013',
-    title: 'Expansión nacional',
+    year: '2017',
+    title: 'Segunda fase y cambio a IMPORTADORA FIDODIDO',
     description:
-      'Ampliamos cobertura con rutas propias para servir la mayoría de provincias en 24/48h.',
+      'Establecimos contacto directo con fabricantes en China, ampliamos la gama de productos y expandimos nuestro centro de distribución.',
     icon: 'route',
   },
   {
-    year: '2019',
-    title: 'Portafolio OEM y premium',
+    year: '2022',
+    title: 'Tercera fase: fortalecimiento en repuestos',
     description:
-      'Incorporamos líneas OEM y marcas premium para elevar la oferta de nuestros clientes.',
+      'Nos enfocamos en repuestos para automóviles y camiones, consolidando nuestra presencia en el sector y fortaleciendo relaciones comerciales.',
     icon: 'workspace_premium',
   },
   {
-    year: '2024',
-    title: 'Operación B2B optimizada',
+    year: 'Hoy',
+    title: 'Innovación y crecimiento sostenible',
     description:
-      'Implementamos un catálogo digital y procesos de preparación para pedidos de alto volumen.',
+      'Continuamos expandiendo nuestras líneas de negocio con compromiso en calidad, innovación y costos competitivos.',
     icon: 'memory',
   },
 ];
@@ -215,12 +215,12 @@ export default function SobreNosotrosPage() {
                 Nuestra historia
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-[#0d151c]">
-                Crecimos junto a los repuestos que confían en nosotros
+                Una trayectoria real de crecimiento en el sector automotriz
               </h2>
             </div>
             <p className="text-sm text-[#4b779b] max-w-xl">
-              Evolucionamos para atender pedidos más grandes sin perder el trato cercano y la
-              rapidez de respuesta.
+              Desde 2015 evolucionamos por fases para suplir mejor el mercado nacional y proyectar
+              nuestra marca YR a nivel internacional.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

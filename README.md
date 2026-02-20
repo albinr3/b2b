@@ -166,14 +166,14 @@ El catálogo (`/catalogo`) requiere autenticación por código de cliente. La co
 
 1. Normaliza el código a 4 dígitos agregando ceros a la izquierda.
 2. Invierte el código.
-3. Suma 8 a cada dígito y, si pasa de 9, usa el último dígito (módulo 10).
+3. Suma 8 a cada dígito y conserva el resultado completo (si pasa de 9, se conservan ambos dígitos).
 
 Ejemplo:
 
 - Código: `1527`
 - Normalizado: `1527`
 - Invertido: `7251`
-- +8 a cada dígito: `5 0 3 9`
-- Contraseña: `5039`
+- +8 a cada dígito: `15 10 13 9`
+- Contraseña: `1510139`
 
-Si el código tiene menos de 4 dígitos, se completa con ceros. Por ejemplo, código `23` → normalizado `0023` → invertido `3200` → contraseña `1088`.
+Si el código tiene menos de 4 dígitos, se completa con ceros. Por ejemplo, código `23` → normalizado `0023` → invertido `3200` → contraseña `111088`.

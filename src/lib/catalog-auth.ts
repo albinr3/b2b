@@ -41,13 +41,13 @@ export function normalizeCode(code: string) {
 export function computePassword(code: string) {
   const normalized = normalizeCode(code);
   const reversed = normalized.split('').reverse();
-  const transformed = reversed.map((digit) => (Number(digit) + 8) % 10);
+  const transformed = reversed.map((digit) => String(Number(digit) + 8));
   return transformed.join('');
 }
 
 export function isValidCatalogLogin(code: string, password: string) {
   if (!/^\d{1,4}$/.test(code)) return false;
-  if (!/^\d{4}$/.test(password)) return false;
+  if (!/^\d{4,8}$/.test(password)) return false;
   return computePassword(code) === password;
 }
 
