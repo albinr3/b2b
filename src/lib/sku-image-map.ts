@@ -25,6 +25,7 @@ const PLACEHOLDER_IMAGE_URLS = new Set([
 ]);
 
 const DEFAULT_PREFIX = 'fotos/';
+const DEFAULT_THUMBS_DIR = '_thumbs';
 const DEFAULT_TTL_MINUTES = 60;
 
 let cachedMap: SkuImageMap | null = null;
@@ -35,6 +36,11 @@ function getPrefix() {
   const raw = process.env.R2_IMAGE_PREFIX || DEFAULT_PREFIX;
   const normalized = raw.replace(/\\/g, '/').replace(/^\/+/, '');
   return normalized.endsWith('/') ? normalized : `${normalized}/`;
+}
+
+function getThumbsDir() {
+  const raw = process.env.R2_THUMBS_DIR || DEFAULT_THUMBS_DIR;
+  return raw.replace(/\\/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') || DEFAULT_THUMBS_DIR;
 }
 
 function loadMapFromFile(): SkuImageMap {
@@ -203,4 +209,39 @@ export async function resolveProductImageUrl(input: {
   const imageUrl = input.imageUrl?.trim() || '';
   if (imageUrl && !PLACEHOLDER_IMAGE_URLS.has(imageUrl)) return imageUrl;
   return (await getImageUrlForSku(input.sku)) || null;
+}
+
+export function getThumbnailUrlForImageUrl(imageUrl?: string | null) {
+  const value = imageUrl?.trim() || '';
+  if (!value || PLACEHOLDER_IMAGE_URLS.has(value)) return null;
+  if (!/^https?:\/\//i.test(value)) return null;
+
+  try {
+    const url = new URL(value);
+    const prefix = getPrefix().replace(/\/+$/, '');
+    const prefixPath = `/${prefix}/`;
+    const thumbsDir = getThumbsDir();
+    const thumbsMarker = `${prefixPath}${thumbsDir}/`;
+
+    if (url.pathname.includes(thumbsMarker)) {
+      return value;
+    }
+
+    const prefixIndex = url.pathname.indexOf(prefixPath);
+    if (prefixIndex === -1) return null;
+
+    const basePath = url.pathname.slice(0, prefixIndex + prefixPath.length);
+    const relativePath = url.pathname.slice(prefixIndex + prefixPath.length);
+    if (!relativePath) return null;
+
+    const withoutExt = relativePath.replace(/\.[^./]+$/, '');
+    if (!withoutExt) return null;
+
+    url.pathname = `${basePath}${thumbsDir}/${withoutExt}.webp`;
+    url.search = '';
+    url.hash = '';
+    return url.toString();
+  } catch {
+    return null;
+  }
 }

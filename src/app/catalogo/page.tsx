@@ -1,6 +1,6 @@
 import CatalogClient from './CatalogClient';
 import { prisma } from '@/lib/prisma';
-import { resolveProductImageUrl } from '@/lib/sku-image-map';
+import { getThumbnailUrlForImageUrl, resolveProductImageUrl } from '@/lib/sku-image-map';
 import type { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { getCatalogSession } from '@/lib/catalog-auth';
@@ -90,18 +90,23 @@ export default async function CatalogoPage(props: {
   }));
 
   const productsWithImages = await Promise.all(
-    products.map(async (product) => ({
-      id: product.id,
-      slug: product.slug,
-      sku: product.sku,
-      descripcion: product.descripcion,
-      referencia: product.referencia,
-      imageUrl: await resolveProductImageUrl({
+    products.map(async (product) => {
+      const resolvedImageUrl = await resolveProductImageUrl({
         sku: product.sku,
         imageUrl: product.imageUrl,
-      }),
-      categoryName: product.category?.name ?? null,
-    })),
+      });
+
+      return {
+        id: product.id,
+        slug: product.slug,
+        sku: product.sku,
+        descripcion: product.descripcion,
+        referencia: product.referencia,
+        imageUrl:
+          getThumbnailUrlForImageUrl(resolvedImageUrl) || resolvedImageUrl,
+        categoryName: product.category?.name ?? null,
+      };
+    }),
   );
   const t2 = Date.now();
 

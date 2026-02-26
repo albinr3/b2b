@@ -26,6 +26,12 @@ const ctaSizeClass: Record<ColumnCount, string> = {
   4: 'px-3 py-1.5 text-xs',
   5: 'px-2.5 py-1 text-[11px]',
 };
+const imageSizesByColumns: Record<ColumnCount, string> = {
+  2: '(max-width: 639px) 50vw, (max-width: 1023px) 50vw, 38vw',
+  3: '(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 26vw',
+  4: '(max-width: 639px) 50vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw',
+  5: '(max-width: 639px) 50vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 16vw',
+};
 
 type CategoryFilter = {
   name: string;
@@ -328,7 +334,9 @@ export default function CatalogClient({
                     alt={p.descripcion || p.referencia || p.sku}
                     fill
                     className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                    sizes={imageSizesByColumns[columns]}
+                    quality={65}
+                    unoptimized
                     loading="lazy"
                   />
                 </Link>

@@ -21,8 +21,7 @@ npm run vercel-build
 
 Ese script ejecuta:
 1. `prisma generate`
-2. `prisma migrate deploy`
-3. `next build --webpack`
+2. `next build --webpack`
 
 Variables mínimas en Vercel:
 - `DATABASE_URL` (Supabase pooler 6543)
@@ -125,6 +124,64 @@ Comportamiento:
 3. Envía lotes a la API.
 4. Si todo sale bien, actualiza `lastSync`.
 5. Si falla, mantiene `lastSync` anterior para reintento seguro.
+
+## Imágenes (R2 + Thumbnails para Catálogo)
+
+### Contexto
+
+- Las imágenes originales viven en Cloudflare R2 (prefijo `fotos/`).
+- El catálogo ahora intenta usar thumbnails en `fotos/_thumbs/` (formato `.webp`) para reducir consumo de Image Optimization en Vercel.
+- Si no existe thumbnail o la URL no aplica, hace fallback a la imagen original.
+
+### Variables relacionadas (R2)
+
+- `R2_ACCOUNT_ID`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_BUCKET_NAME`
+- `R2_PUBLIC_URL` o `NEXT_PUBLIC_R2_PUBLIC_URL`
+- `R2_IMAGE_PREFIX` (opcional, default: `fotos/`)
+- `R2_THUMBS_DIR` (opcional, default: `_thumbs`)
+
+### Descargar originales desde R2
+
+Comando (usa SDK de AWS, no requiere `aws cli`):
+
+```bash
+npm run r2:download:fotos
+```
+
+Salida local por defecto:
+- `./r2-downloads/fotos`
+
+### Generar thumbnails localmente (WebP)
+
+Script:
+- `scripts/generate_thumbnails.py`
+
+Ejemplo recomendado (catálogo):
+
+```bash
+python scripts/generate_thumbnails.py r2-downloads/fotos r2-downloads/fotos-thumbs --size 640 --quality 65
+```
+
+Salida local:
+- `./r2-downloads/fotos-thumbs`
+
+### Subir thumbnails a R2
+
+Comando:
+
+```bash
+node scripts/upload-r2.js ./r2-downloads/fotos-thumbs fotos/_thumbs
+```
+
+Destino en bucket:
+- `fotos/_thumbs/*.webp`
+
+Notas:
+- El script de upload salta archivos que ya existen en R2 (no re-sube lo ya cargado).
+- El catálogo usa thumbnails de forma preferente y mantiene fallback a la imagen original.
 
 ### Tarea programada (Windows)
 
