@@ -24,5 +24,9 @@ export async function catalogLoginAction(
   }
 
   await setCatalogSession(code);
-  redirect('/catalogo');
+
+  const callbackUrl = String(formData.get('callbackUrl') || '').trim();
+  const destination =
+    callbackUrl && callbackUrl.startsWith('/catalogo') ? callbackUrl : '/catalogo';
+  redirect(destination);
 }

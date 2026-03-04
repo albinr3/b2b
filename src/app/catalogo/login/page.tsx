@@ -2,10 +2,15 @@ import { redirect } from 'next/navigation';
 import { getCatalogSession } from '@/lib/catalog-auth';
 import LoginForm from './LoginForm';
 
-export default async function CatalogLoginPage() {
+type Props = {
+  searchParams: Promise<{ callbackUrl?: string }>;
+};
+
+export default async function CatalogLoginPage({ searchParams }: Props) {
+  const { callbackUrl } = await searchParams;
   const session = await getCatalogSession();
   if (session) {
-    redirect('/catalogo');
+    redirect(callbackUrl || '/catalogo');
   }
 
   return (
@@ -17,7 +22,7 @@ export default async function CatalogLoginPage() {
             Ingresa tu código de cliente para continuar.
           </p>
         </div>
-        <LoginForm />
+        <LoginForm callbackUrl={callbackUrl} />
       </div>
     </div>
   );

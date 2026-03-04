@@ -5,12 +5,13 @@ import { catalogLoginAction } from './actions';
 
 const initialState = { ok: false, message: '' };
 
-export default function LoginForm() {
+export default function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   const [state, formAction, isPending] = useActionState(catalogLoginAction, initialState);
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
+      {callbackUrl && <input type="hidden" name="callbackUrl" value={callbackUrl} />}
       <label className="flex flex-col gap-1">
         <span className="text-xs font-semibold text-[#4b779b]">Código</span>
         <input

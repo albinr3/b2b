@@ -41,7 +41,10 @@ export async function middleware(request: NextRequest) {
     const hasCatalogSession = Boolean(catalogToken);
     if (!hasCatalogSession && !isCatalogLogin) {
       const url = request.nextUrl.clone();
+      const originalUrl = `${pathname}${request.nextUrl.search}`;
       url.pathname = '/catalogo/login';
+      url.search = '';
+      url.searchParams.set('callbackUrl', originalUrl);
       const response = NextResponse.redirect(url);
       if (catalogToken) {
         response.cookies.set(CATALOG_SESSION_COOKIE, '', { path: '/', maxAge: 0 });
