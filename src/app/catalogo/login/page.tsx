@@ -6,6 +6,14 @@ type Props = {
   searchParams: Promise<{ callbackUrl?: string }>;
 };
 
+/**
+ * Página de login para el catálogo.
+ *
+ * Recibe un `callbackUrl` opcional como query param (ej: /catalogo?cat=frenos).
+ * Si el usuario ya tiene sesión activa, redirige directamente a esa URL.
+ * Si no, muestra el formulario y pasa el callbackUrl para que tras el login
+ * la server action redirija al destino original.
+ */
 export default async function CatalogLoginPage({ searchParams }: Props) {
   const { callbackUrl } = await searchParams;
   const session = await getCatalogSession();

@@ -3,6 +3,15 @@ import type { NextRequest } from 'next/server';
 import { ADMIN_SESSION_COOKIE } from '@/lib/admin-auth-constants';
 import { CATALOG_SESSION_COOKIE } from '@/lib/catalog-auth-constants';
 
+/**
+ * Middleware de autenticación para rutas protegidas (/admin y /catalogo).
+ *
+ * - Rutas admin: redirige a /admin/login si no hay sesión.
+ * - Rutas catálogo: redirige a /catalogo/login preservando la URL original
+ *   (incluyendo query string) como parámetro `callbackUrl`, para que tras
+ *   el login el usuario vuelva exactamente a donde intentaba acceder.
+ * - APIs admin: responde 401 si no hay token.
+ */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAdminPath = pathname.startsWith('/admin');
@@ -40,12 +49,11 @@ export async function middleware(request: NextRequest) {
     const catalogToken = request.cookies.get(CATALOG_SESSION_COOKIE)?.value;
     const hasCatalogSession = Boolean(catalogToken);
     if (!hasCatalogSession && !isCatalogLogin) {
-      const url = request.nextUrl.clone();
+      // Preservar URL completa (pathname + query string) para redirect post-login
       const originalUrl = `${pathname}${request.nextUrl.search}`;
-      url.pathname = '/catalogo/login';
-      url.search = '';
-      url.searchParams.set('callbackUrl', originalUrl);
-      const response = NextResponse.redirect(url);
+      const loginUrl = new URL('/catalogo/login', request.url);
+      loginUrl.search = `?callbackUrl=${encodeURIComponent(originalUrl)}`;
+      const response = NextResponse.redirect(loginUrl);
       if (catalogToken) {
         response.cookies.set(CATALOG_SESSION_COOKIE, '', { path: '/', maxAge: 0 });
       }

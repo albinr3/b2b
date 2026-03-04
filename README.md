@@ -234,3 +234,13 @@ Ejemplo:
 - Contraseña: `1510139`
 
 Si el código tiene menos de 4 dígitos, se completa con ceros. Por ejemplo, código `23` → normalizado `0023` → invertido `3200` → contraseña `111088`.
+
+### Redirect post-login (callbackUrl)
+
+Cuando un usuario sin sesión intenta acceder a una URL protegida del catálogo (ej: `/catalogo?cat=accesorios`), el sistema preserva la URL completa (incluyendo query params) durante todo el flujo de login:
+
+1. **Middleware** (`middleware.ts`): detecta que no hay sesión y redirige a `/catalogo/login?callbackUrl=%2Fcatalogo%3Fcat%3Daccesorios`.
+2. **Página de login** (`catalogo/login/page.tsx`): lee el `callbackUrl` de los searchParams y lo pasa al formulario.
+3. **Formulario** (`LoginForm.tsx`): incluye el `callbackUrl` como campo oculto (`<input type="hidden">`).
+4. **Server action** (`actions.ts`): tras autenticación exitosa, redirige al `callbackUrl` en lugar de `/catalogo`. Por seguridad, solo acepta URLs que empiecen con `/catalogo` para evitar open redirects.
+5. **Fallback en page** (`catalogo/page.tsx`): si el middleware no intercepta (ej: cookie expirada server-side), la página también reconstruye la URL con query params antes de redirigir al login.

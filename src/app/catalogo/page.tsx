@@ -13,12 +13,20 @@ export default async function CatalogoPage(props: {
   searchParams?: Promise<{ cat?: string; page?: string; q?: string }>;
 }) {
   const session = await getCatalogSession();
+  const searchParams = await props.searchParams;
+
+  // Fallback de protección (el middleware debería interceptar primero).
+  // Reconstruye la URL completa con query params para no perderlos en el redirect.
   if (!session) {
-    redirect('/catalogo/login');
+    const qs = new URLSearchParams();
+    if (searchParams?.cat) qs.set('cat', searchParams.cat);
+    if (searchParams?.page) qs.set('page', searchParams.page);
+    if (searchParams?.q) qs.set('q', searchParams.q);
+    const originalUrl = `/catalogo${qs.toString() ? `?${qs.toString()}` : ''}`;
+    redirect(`/catalogo/login?callbackUrl=${encodeURIComponent(originalUrl)}`);
   }
 
   const t0 = Date.now();
-  const searchParams = await props.searchParams;
   const activeCategory = searchParams?.cat?.trim() || null;
   const searchQuery = searchParams?.q?.trim() || null;
   const currentPage = Math.max(1, parseInt(searchParams?.page || '1', 10));

@@ -5,6 +5,11 @@ import { catalogLoginAction } from './actions';
 
 const initialState = { ok: false, message: '' };
 
+/**
+ * Formulario de login del catálogo.
+ * Si recibe `callbackUrl`, lo incluye como campo oculto para que la server
+ * action redirija al usuario a la URL original tras autenticarse.
+ */
 export default function LoginForm({ callbackUrl }: { callbackUrl?: string }) {
   const [state, formAction, isPending] = useActionState(catalogLoginAction, initialState);
   const [showPassword, setShowPassword] = useState(false);

@@ -8,6 +8,13 @@ type ActionResult = {
   message: string;
 };
 
+/**
+ * Server action del login de catálogo.
+ * Valida código + contraseña, crea la sesión y redirige al `callbackUrl`
+ * que viene como campo oculto del formulario.
+ * Por seguridad, solo acepta callbackUrls que empiecen con "/catalogo"
+ * para evitar open redirects a sitios externos.
+ */
 export async function catalogLoginAction(
   _prev: ActionResult,
   formData: FormData,
@@ -25,6 +32,7 @@ export async function catalogLoginAction(
 
   await setCatalogSession(code);
 
+  // Redirigir a la URL original (con query params) o /catalogo como fallback
   const callbackUrl = String(formData.get('callbackUrl') || '').trim();
   const destination =
     callbackUrl && callbackUrl.startsWith('/catalogo') ? callbackUrl : '/catalogo';
