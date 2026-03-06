@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Chrome from "@/components/Chrome";
 
@@ -7,6 +8,8 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
+
+const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim();
 
 export const metadata: Metadata = {
   title: "Importadora Fidodido - Repuestos confiables para tu inventario",
@@ -41,6 +44,22 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Importadora Fidodido" />
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-[#f8f5f5] text-[#0d151c] min-h-screen flex flex-col`}>
+        {googleAnalyticsId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${googleAnalyticsId}');
+              `}
+            </Script>
+          </>
+        ) : null}
         <Chrome>
           <main className="flex flex-col items-center flex-1">{children}</main>
         </Chrome>

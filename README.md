@@ -28,6 +28,7 @@ Variables mínimas en Vercel:
 - `DIRECT_URL` (Supabase pooler/session 5432 con `?sslmode=require`)
 - `ADMIN_AUTH_SECRET`
 - `CATALOG_AUTH_SECRET`
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
 - `SYNC_API_TOKEN`
 - variables de R2 (`R2_*` y `NEXT_PUBLIC_R2_PUBLIC_URL`)
 - `NEXT_PUBLIC_SITE_URL`
