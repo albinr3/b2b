@@ -5,32 +5,36 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-const COLUMN_OPTIONS = [2, 3, 4, 5] as const;
+const COLUMN_OPTIONS = [1, 2, 3, 4, 5] as const;
 type ColumnCount = (typeof COLUMN_OPTIONS)[number];
 
 const gridColsClass: Record<ColumnCount, string> = {
+  1: 'grid-cols-1',
   2: 'grid-cols-2',
-  3: 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3',
-  4: 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
-  5: 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+  5: 'grid-cols-5',
 };
 const titleSizeClass: Record<ColumnCount, string> = {
+  1: 'text-base',
   2: 'text-sm sm:text-base',
   3: 'text-sm sm:text-base',
   4: 'text-sm',
   5: 'text-xs',
 };
 const ctaSizeClass: Record<ColumnCount, string> = {
+  1: 'px-4 py-2 text-sm',
   2: 'px-4 py-2 text-sm',
   3: 'px-4 py-2 text-sm',
   4: 'px-3 py-1.5 text-xs',
   5: 'px-2.5 py-1 text-[11px]',
 };
 const imageSizesByColumns: Record<ColumnCount, string> = {
-  2: '(max-width: 639px) 50vw, (max-width: 1023px) 50vw, 38vw',
-  3: '(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 26vw',
-  4: '(max-width: 639px) 50vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw',
-  5: '(max-width: 639px) 50vw, (max-width: 767px) 50vw, (max-width: 1023px) 33vw, 16vw',
+  1: '100vw',
+  2: '50vw',
+  3: '33vw',
+  4: '25vw',
+  5: '20vw',
 };
 
 type CategoryFilter = {
@@ -65,10 +69,14 @@ export default function CatalogClient({
   currentPage: number;
   totalPages: number;
 }) {
-  const [columns, setColumns] = useState<ColumnCount>(3);
+  const [columns, setColumns] = useState<ColumnCount>(2);
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
   const [query, setQuery] = useState(searchQuery ?? '');
   const router = useRouter();
+
+  useEffect(() => {
+    if (window.innerWidth >= 640) setColumns(3);
+  }, []);
 
   useEffect(() => {
     setQuery(searchQuery ?? '');
@@ -308,7 +316,7 @@ export default function CatalogClient({
                   >
                     {COLUMN_OPTIONS.map((n) => (
                       <option key={n} value={n}>
-                        {n} columnas
+                        {n} {n === 1 ? 'columna' : 'columnas'}
                       </option>
                     ))}
                   </select>

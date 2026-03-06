@@ -31,6 +31,12 @@ export default async function CatalogLoginPage({ searchParams }: Props) {
           </p>
         </div>
         <LoginForm callbackUrl={callbackUrl} />
+
+        <div className="mt-6 rounded-lg bg-slate-50 border border-slate-200 px-4 py-3">
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Tu usuario y contraseña se encuentran en la copia de tu factura. Si no los tienes, contacta a tu ejecutivo de ventas.
+          </p>
+        </div>
       </div>
     </div>
   );

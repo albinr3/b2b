@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import CatalogClient from './CatalogClient';
 import { prisma } from '@/lib/prisma';
 import { getThumbnailUrlForImageUrl, resolveProductImageUrl } from '@/lib/sku-image-map';
 import type { Prisma } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { getCatalogSession } from '@/lib/catalog-auth';
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 const PRODUCTS_PER_PAGE = 36;
 const shouldLogPerf =
