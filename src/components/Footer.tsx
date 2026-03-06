@@ -103,6 +103,12 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Importadora Fidodido. Todos los derechos reservados.</p>
+          <a
+            href="/sitemap.xml"
+            className="text-gray-500 hover:text-white text-sm transition-colors"
+          >
+            Sitemap
+          </a>
         </div>
       </div>
     </footer>
