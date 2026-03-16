@@ -277,12 +277,22 @@ export default function CatalogClient({
                       cat.active ? 'text-slate-900 font-medium' : 'text-slate-600'
                     }`;
                     return isMusic ? (
-                      <a key={cat.slug} href={href} className={linkClass}>
+                      <a
+                        key={cat.slug}
+                        href={href}
+                        className={linkClass}
+                        onClick={() => setMobileCategoriesOpen(false)}
+                      >
                         <span className={textClass}>{cat.name}</span>
                         <span className="ml-auto text-xs text-slate-400">({cat.count})</span>
                       </a>
                     ) : (
-                      <Link key={cat.slug} href={href} className={linkClass}>
+                      <Link
+                        key={cat.slug}
+                        href={href}
+                        className={linkClass}
+                        onClick={() => setMobileCategoriesOpen(false)}
+                      >
                         <span className={textClass}>{cat.name}</span>
                         <span className="ml-auto text-xs text-slate-400">({cat.count})</span>
                       </Link>
@@ -292,6 +302,7 @@ export default function CatalogClient({
                     <Link
                       href={buildCatalogUrl({ q: searchQuery, page: 1 })}
                       className="text-xs text-[#D00000] font-semibold"
+                      onClick={() => setMobileCategoriesOpen(false)}
                     >
                       Limpiar filtro
                     </Link>
