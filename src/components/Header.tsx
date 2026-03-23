@@ -16,6 +16,8 @@ const navLinks = [
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const showCatalogLogout =
+    pathname.startsWith('/catalogo') && !pathname.startsWith('/catalogo/login');
 
   useEffect(() => {
     setMobileOpen(false);
@@ -78,6 +80,15 @@ export default function Header() {
             >
               <span className="truncate">Contáctanos</span>
             </Link>
+            {showCatalogLogout && (
+              <Link
+                href="/catalogo/logout"
+                className="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 border border-slate-300 text-slate-700 hover:border-[#D00000] hover:text-[#D00000] text-sm font-bold leading-normal tracking-[0.015em] transition-colors"
+              >
+                <span className="material-symbols-outlined text-[18px]">logout</span>
+                <span className="truncate">Cerrar sesión</span>
+              </Link>
+            )}
           </div>
           <div className="lg:hidden">
             <button
@@ -141,6 +152,16 @@ export default function Header() {
           >
             Contáctanos
           </Link>
+          {showCatalogLogout && (
+            <Link
+              href="/catalogo/logout"
+              onClick={() => setMobileOpen(false)}
+              className="mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg h-11 px-4 border border-slate-300 text-slate-700 hover:border-[#D00000] hover:text-[#D00000] text-sm font-bold leading-normal tracking-[0.015em] transition-colors"
+            >
+              <span className="material-symbols-outlined text-[18px]">logout</span>
+              Cerrar sesión
+            </Link>
+          )}
         </div>
       </div>
     </header>
