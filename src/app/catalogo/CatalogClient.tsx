@@ -154,13 +154,21 @@ export default function CatalogClient({
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
-        <div>
-          <h1 className="text-slate-900 text-3xl font-bold tracking-tight mb-2">
-            Catálogo de Productos
-          </h1>
-          <p className="text-slate-500">
-            Explora nuestro inventario de refacciones originales y OEM.
-          </p>
+        <div className="space-y-3">
+          <div>
+            <h1 className="text-slate-900 text-3xl font-bold tracking-tight mb-2">
+              Catálogo de Productos
+            </h1>
+            <p className="text-slate-500">
+              Explora nuestro inventario de refacciones originales y OEM.
+            </p>
+          </div>
+          <a
+            href="/catalogo/logout"
+            className="inline-flex items-center rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 hover:border-[#D00000] hover:text-[#D00000] transition-colors"
+          >
+            Desloguear
+          </a>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto md:max-w-[700px] flex-1 justify-end">
           <form
@@ -485,3 +493,4 @@ export default function CatalogClient({
     </div>
   );
 }
+
